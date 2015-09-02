@@ -84,6 +84,14 @@ a{
 	vertical-align: top;
 	padding-top: 11px;
 }
+
+.botones_reproduccion:hover{
+	color: #00a4ba;
+}
+
+.botones_reproduccion:active{
+	color: #00a4ba;
+}
 #reproduccion_barra{
 	bottom: 80px;
 	width: 100%;
