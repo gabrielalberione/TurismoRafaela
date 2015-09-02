@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
+    
+    <title>ALPI</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href="css/jplayer.blue.monday.css" rel="stylesheet" type="text/css">     
+    <link href="css/snap.css" rel="stylesheet">
+	<link href="css/index.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<style>
+		.snapjs-left .snap-drawers {
+			display: block;
+		}
+		.snap-drawers {
+			display: none;
+			background-color:#EEEEEE;
+		}
+		.snap-drawer{
+			background-color:#EEEEEE;
+		}
+    </style>
+    <body>
+        <div class="snap-drawers">
+             <div class="snap-drawer snap-drawer-left">
+                <div class="col-xs-12 fondo_top" style="height:50px;">
+                    <div id="top_titulo" style="border-bottom: 1px solid #e5e5e5; padding: 12px;"><span>Menú de Opciones</span></div>
+                </div>
+                <div class="col-xs-12" style="margin-top: 10px;">
+                    <p class="menu_opciones" style="font-size: 16px; text-align: center;"><b>¿Que estas buscando?</b></p>
+                </div>
+                <div class="col-xs-12">
+                    <select id="selectRubrosBusqueda" class="input_buscar">
+                    </select>
+                </div>
+                <div class="col-xs-12" style="margin-top: 15px;">
+                    <input id="inputBusqueda" class="input_buscar" name="inputBusqueda" type="text" placeholder="buscar por nombre...">
+                </div>
+                <div class="col-xs-12" style="margin-top: 15px;">
+                    <button type="button" class="btn btn-primary boton_verde_alpi" onclick="realizarBusqueda()" 
+                    style="border-radius: 40px; height: 40px; width: 100%;">
+                        <i class="fa fa-search" style="margin-left:-1px;"></i>
+                    </button>
+                </div>
+                <div class="col-xs-12" style="margin-top: 20px; margin-left:5px">
+                    <div id="divAjaxResultadoBusqueda"></div>
+                </div>
+                <div class="col-xs-12"  style="margin-top: 20px; margin-left:5px">
+                    <div class="menu_opciones jframe_sugerencia"><i class="fa fa-envelope" style="margin-right: 5px;"></i>Sugerencias</div>
+                </div>
+                <div class="col-xs-12" style="margin-top: 15px; margin-left:5px">
+                    <div class="menu_opciones jframe_about"><i class="fa fa-info-circle" style="margin-right: 5px;margin-left:2px"></i>About</div>
+                </div>
+            </div> 
+        </div>    	    
+    
+    	<div id="contenido"  class="snap-content">    
+            <nav class="navbar navbar-default navbar-fixed-top">        
+                <div class="container fondo_top">
+                    <div id="do-drag" style="height: 50px;">
+                        <div id="btn_menu" class="sb-toggle-left top_btn_menu"><em class="fa fa-bars"></em></div>
+                        <div id="top_titulo"><span>Recorridos</span></div>
+                        <div id="botonera_top"><i class="fa fa-refresh"></i></div>
+                    </div>	
+                    <div id="divInfoEntidad" style="display:none; width:100%; border-top: solid 2px #e5e5e5;">
+                        <div id="swipe_zona_marker;" style="border-bottom: solid 2px #e5e5e5;">
+                            <div class="row" style="padding: 10px;">
+                                <div class="col-xs-4" style="text-align: center;">
+                                    <a id="infoEntidadImgA" href="#"><img id="infoEntidadImg" src="#" style="height: 80px;border-radius: 10px;"></a>
+                                </div>
+                                <div class="col-xs-8"> 
+                                    <i id="marker_cruz" class="fa fa-times" style="font-size: 16px; float: right; margin-right: 0px; margin-top: 0px;"></i>
+                                    <h5 style="margin-top: 0px; font-weight: bold;" id="infoEntidadTitulo"></h5>
+                                    <span id="infoEntidadCopete"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="div_toggle_detalle" style="width:100%; text-align: center;">
+                            <i id="marker_flecha" class="fa fa-caret-down" style="padding: 8px; font-size: 16px;"></i>
+                        </div>
+                    </div>        
+                </div>         
+            </nav>
+            <div id="jquery_jplayer_1" class="jp-jplayer"></div>
+            <div id="jp_container_1" class="reproductor_audio">
+            	<div class="jp-type-single">
+					<div class="jp-gui jp-interface">
+                        <div class="jp-progress" id="reproduccion_barra">
+                            <div class="jp-seek-bar">
+                                <div class="jp-play-bar" style="background-color: #01a3bc;"></div>
+                            </div>
+                        </div>
+                        <i class="fa fa-headphones auriculares"></i>
+                        <i class="fa fa-step-backward botones_reproduccion"></i>
+                        <a class="jp-pause" href="#"><i class="fa fa-pause botones_reproduccion"></i></a>
+                        <a class="jp-play" href="#"><i class="fa fa-play botones_reproduccion"></i></a>
+                        <i class="fa fa-step-forward botones_reproduccion"></i>
+                        <a class="jp-stop" href="#"><i class="fa fa-stop botones_reproduccion"></i></a>
+                        <ul style="display: none;">
+                            <li><a href="http://www.jplayer.org/audio/mp3/TSP-01-Cro_magnon_man.mp3" class="track track-default">Cro Magnon Man</a></li>
+                        </ul>	
+                    </div>
+                  </div>	
+            </div>
+            <div class="borde_bottom">
+                <img src="img/logo_largo_muni.png" class="img-responsive" style="max-height:30px; margin: auto; padding-top: 8px;">
+            </div>
+        </div>         
+		<script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>		
+        <script type="text/javascript" src="js/libs/jquery.js"></script>		
+        <script type="text/javascript" src="js/libs/bootstrap.min.js"></script>	
+        <script type="text/javascript" src="js/libs/snap.js"></script>   
+        <script type="text/javascript" src="js/libs/jquery.jplayer.min.js"></script>
+        <script type="text/javascript">
+			var snapper = new Snap({
+				element: document.getElementById('contenido'),
+				dragger: document.getElementById('do-drag'),
+				disable: 'right'
+			});				
+	
+			app.initialize();		
+			(function($) {
+				$(document).ready(function() {				
+					//mySlidebars = new $.slidebars();
+					/*var busqueda = window.localStorage.getItem("busqueda");
+					if(busqueda != ""){
+						var resultado = window.localStorage.getItem("resultado");
+					}*/		
+						
+					$('#btn_menu').click(function(e) {
+						 snapper.open('left');  
+					});
+					
+					
+					$("#jquery_jplayer_1").jPlayer({
+						ready: function () {
+							$(this).jPlayer("setMedia", {
+								title: "Bubble",
+								mp3: "http://jplayer.org/audio/mp3/Miaow-07-Bubble.mp3"
+							});
+						},
+						swfPath: "js/libs/jplayer",
+						supplied: "mp3",
+						wmode: "window",
+						useStateClassSkin: true,
+						autoBlur: false,
+						smoothPlayBar: true,
+						keyEnabled: true,
+						remainingDuration: true,
+						toggleDuration: true
+					});
+					
+					/* REPRODUCTOR DE MUSICA 
+					// Local copy of jQuery selectors, for performance.
+					var	my_jPlayer = $("#jquery_jplayer"),
+						my_trackName = $("#jp_container .track-name"),
+						my_playState = $("#jp_container .play-state"),
+						my_extraPlayInfo = $("#jp_container .extra-play-info");
+						
+				
+					// Some options
+					var	opt_play_first = false, // If true, will attempt to auto-play the default track on page loads. No effect on mobile devices, like iOS.
+						opt_auto_play = true, // If true, when a track is selected, it will auto-play.
+						opt_text_playing = "Now playing", // Text when playing
+						opt_text_selected = "Track selected"; // Text when not playing
+				
+					// A flag to capture the first track
+					var first_track = true;
+				
+					// Change the time format
+					$.jPlayer.timeFormat.padMin = false;
+					$.jPlayer.timeFormat.padSec = false;
+					$.jPlayer.timeFormat.sepMin = " min ";
+					$.jPlayer.timeFormat.sepSec = " sec";
+				
+					// Initialize the play state text
+					my_playState.text(opt_text_selected);
+				
+					// Instance jPlayer
+					my_jPlayer.jPlayer({
+						ready: function () {
+							$("#jp_container .track-default").click();
+						},
+						timeupdate: function(event) {
+							var porc = parseInt(event.jPlayer.status.currentPercentAbsolute, 10);
+							$("#reproduccion_barra").width(porc+"%");
+						},
+						play: function(event) {
+							my_playState.text(opt_text_playing);
+						},
+						pause: function(event) {
+							my_playState.text(opt_text_selected);
+						},
+						ended: function(event) {
+							my_playState.text(opt_text_selected);
+						},
+						swfPath: "js/libs/jplayer",
+						cssSelectorAncestor: "#jp_container",
+						supplied: "mp3",
+						wmode: "window"
+					});
+				
+					// Create click handlers for the different tracks
+					$("#jp_container .track").click(function(e) {
+						my_trackName.text($(this).text());
+						my_jPlayer.jPlayer("setMedia", {
+							mp3: $(this).attr("href")
+						});
+						if((opt_play_first && first_track) || (opt_auto_play && !first_track)) {
+							my_jPlayer.jPlayer("play");
+						}
+						first_track = false;
+						$(this).blur();
+						return false;
+					});	*/
+				});			
+			}) (jQuery);					
+    </script>	                  
+    </body>
+</body>
+</html>

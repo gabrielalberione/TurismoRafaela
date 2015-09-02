@@ -1,0 +1,158 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+@font-face {
+    font-family: 'Roboto'; /*a name to be used later*/
+    src: url('../fonts/Roboto-Regular.ttf'); /*URL to font*/
+}
+
+@font-face {
+    font-family: 'Roboto'; /*a name to be used later*/
+	font-weight: bold;
+    src: url('../fonts/Roboto-Bold.ttf'); /*URL to font*/
+}
+
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    background-attachment:fixed;
+    font-family:'Roboto', Arial, sans-serif !important;
+    font-size:12px;
+    height:100%;
+    margin:0px;
+    padding:0px;
+    width:100%;
+}
+
+a{
+	color: #fefefe;
+}
+
+.fondo_top{
+	background-color: #00a4ba;
+}
+
+.borde_top{
+	background-color: #2E8092;
+	top: 0px;
+	position: fixed;
+	z-index: 2;
+	width: 100%;
+	height: 20px;
+}
+
+.borde_bottom{
+	bottom: 0;
+	position: fixed;
+	width: 100%;
+	background-color: #dcdbd7;
+	height: 40px;
+}
+
+.reproductor_audio{
+	bottom: 40px;
+	width: 100%;
+	position: fixed;
+	color: #fdfdfd;
+	background-color: #939292;
+	text-align: right;
+	padding-right: 60px;	
+}
+.reproductor_audio .botones_reproduccion{
+	font-size: 18px;
+	margin-left: 25px;
+	vertical-align: top;
+	padding-top: 11px;
+}
+#reproduccion_barra{
+	bottom: 80px;
+	width: 100%;
+	position: fixed;
+	height: 5px;
+}
+.reproductor_audio .auriculares{
+	font-size: 30px;
+	padding: 5px;
+	color: #00a4ba;
+	margin-right: 10px;
+}
+.color_letra_celeste{
+	color: #00a9c3;
+}
+
+.color_letra_gris_claro{
+	color: #7c7d7b;
+}
+
+.btn_celeste{
+	background-color: #41b2c8  !important;
+	border-color: #41b2c8 !important; 
+}
+
+#btn_menu{
+	float: left;
+}
+
+#top_titulo{
+	float: left;
+}
+
+.top_btn_menu{
+	color: #fffeff;
+	font-size: 25px;
+	margin-top: 8px;
+}
+
+#top_titulo{
+	color: #fffeff;
+	font-size: 20px;
+	margin-top: 10px;
+	margin-left: 35px;
+	font-weight: bold;
+}
+
+#botonera_top{
+	float: right;
+	color: #fffeff;
+	margin-top: 10px;
+	font-size: 20px;
+}
+
+/* CHECKBOX */
+
+.span_check{
+	 font-family: FontAwesome;
+	 font-size: 20px;
+}
+
+input[type='checkbox'] {     
+    position: relative;
+    left: -999em; /* hide the real checkbox */
+}
+
+input[type='checkbox'] + span.span_check:after {
+    content: "\f096"; /* In fontawesome, is an open square (fa-square-o) */
+}
+input[type='checkbox']:checked + span.span_check:after {
+    content: "\f046"; /* fontawesome checked box (fa-check-square-o) */
+}
