@@ -151,7 +151,18 @@
 						smoothPlayBar: true,
 						keyEnabled: true
 					});
-					
+					var id = "#jquery_jplayer_1";
+					var media = {
+						mp3:"madre.mp3"
+					};
+					var options = {
+						swfPath: "/my/swf/path",
+						supplied: "mp3,oga",
+						wmode: "window",
+						smoothPlayBar: true,
+						keyEnabled: true
+					};
+					var myFix = new jPlayerAndroidFix(id, media, options);
 					/* REPRODUCTOR DE MUSICA 
 					// Local copy of jQuery selectors, for performance.
 					var	my_jPlayer = $("#jquery_jplayer"),
