@@ -1,0 +1,32 @@
+<html>
+    <div>
+        <div class="borde_top">
+            <!-- top superior -->
+        </div>
+        <img src="img/top_muni.png" class="img-responsive" />
+        <div class="col-md-12" style="margin: 10px; margin-top: 35px;">
+            <h3 class="color_letra_celeste"><b>Hola!</b></h3>
+            <p class="color_letra_gris_claro" style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            Duis lacinia massa id lorem lobortis posue Lorem ipsum dolor sit 
+            amet, consectetur adipiscing elit.</p>
+            <div class="color_letra_gris_claro" style="margin-top: 50px;"> 
+                <div style="float: left; margin-top: 3px;">
+                    <b>No volver a mostrar este mensaje</b>
+                 </div>
+                 <input type="checkbox" name="vehicle" value="Bike" />
+                 <span class="span_check"></span>
+            </div>
+        </div>
+        <div  class="col-md-12" style="float:right; margin-top: 15px; margin-bottom: 60px; margin-right: 5px;">
+           <button type="button" class="btn btn-primary btn_celeste" onclick="avanza()" 
+                    style="border-radius: 40px; height: 40px; width: 40px; margin-left: 15px;">
+                <span class="fa fa-chevron-right" style="padding-left: 2px;padding-top: 4px;"></span>
+            </button>
+        </div>                
+    </div> 
+    <script>
+		function avanza(){
+			cambiar_contenido("views/punto.html", "Recorrido", true, true);
+		}
+	</script>
+</html>

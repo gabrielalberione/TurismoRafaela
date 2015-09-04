@@ -30,3 +30,28 @@ var app = {
         console.log('Received Event: ' + id);
     }		
 };
+
+function insertar_html(pUrl, div_id){
+	$("#"+div_id).load(pUrl);		
+}
+
+function cambiar_contenido(pUrl, pCabecera, pMenu, pPie){
+	$("#cabecera").show();
+	$("#menu").show();
+	$("#pie").show();
+	insertar_html(pUrl, "contenido");
+	if(pCabecera != ""){
+		$("#cabecera_titulo").html(pCabecera);
+	}else{
+		$("#cabecera").hide();		
+	}
+	
+	if(!pMenu){
+		$("#menu").hide();
+	}
+	
+	if(!pPie){
+		$("#pie").hide();
+	}
+}
+

@@ -1,0 +1,53 @@
+<div class="snap-drawers">
+     <div class="snap-drawer snap-drawer-left">  
+        <img src="img/top_muni.png" class="img-responsive" />  
+        <div class="col-xs-12 menu_item">
+           <i class="fa fa-child"></i>Recorridos
+        </div>
+        <div class="col-xs-12 menu_item">
+           <a href="javascript:leer_qr();"><i class="fa fa-qrcode"></i>Lector QR</a>
+        </div>				
+        <div class="col-xs-12 menu_item">
+           <i class="fa fa-cog"></i>Configuracion
+        </div>
+        <div class="col-xs-12 menu_item">
+           <i class="fa fa-question-circle"></i>Modo de uso
+        </div>
+        <div class="col-xs-12 menu_item">
+           <i class="fa fa-info-circle"></i>Sobre la aplicación
+        </div>				
+        <div class="borde_bottom">
+            <img src="img/logo_largo_muni.png" class="img-responsive" style="max-height:30px; margin: auto; padding-top: 8px;" />
+        </div>
+    </div> 
+</div>  
+<script>
+	var snapper = new Snap({
+		element: document.getElementById('contenido_general'),
+		//dragger: document.getElementById('do-drag'),
+		disable: 'right'
+	});				
+	
+	(function($) {
+		$(document).ready(function() {										
+			$('#btn_menu').click(function(e) {
+				 snapper.open('left');  
+			});
+		});
+	}) (jQuery);
+	
+	function leer_qr(){
+		cordova.plugins.barcodeScanner.scan(
+		  function (result) {
+			  alert("We got a barcode\n" +
+					"Result: " + result.text + "\n" +
+					"Format: " + result.format + "\n" +
+					"Cancelled: " + result.cancelled);
+		  }, 
+		  function (error) {
+			  alert("Scanning failed: " + error);
+		  }
+	   );
+	}
+</script>
+

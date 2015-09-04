@@ -1,0 +1,38 @@
+.reproductor_audio{
+	bottom: 40px;
+	width: 100%;
+	position: fixed;
+	color: #fdfdfd;
+	background-color: #939292;
+	text-align: right;
+	padding-right: 60px;	
+}
+.reproductor_audio .botones_reproduccion{
+	font-size: 18px;
+	margin-left: 25px;
+	vertical-align: top;
+	padding-top: 11px;
+}
+
+.botones_reproduccion:hover{
+	color: #00a4ba;
+}
+
+.botones_reproduccion:active{
+	color: #00a4ba;
+}
+
+#reproduccion_barra{
+	bottom: 80px;
+	width: 0%;
+	position: fixed;
+	height: 5px;
+	background-color: #00a4ba;
+}
+
+.reproductor_audio .auriculares{
+	font-size: 30px;
+	padding: 5px;
+	color: #00a4ba;
+	margin-right: 10px;
+}

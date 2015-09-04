@@ -61,12 +61,13 @@ a{
 	height: 20px;
 }
 
-.borde_bottom{
+#pie{
 	bottom: 0;
 	position: fixed;
 	width: 100%;
 	background-color: #dcdbd7;
 	height: 40px;
+	z-index: 2;
 }
 
 .reproductor_audio{
@@ -117,10 +118,6 @@ a{
 	border-color: #41b2c8 !important; 
 }
 
-#btn_menu{
-	float: left;
-}
-
 #top_titulo{
 	float: left;
 }
@@ -144,6 +141,28 @@ a{
 	color: #fffeff;
 	margin-top: 10px;
 	font-size: 20px;
+}
+
+/* MENU LATERAL */
+
+#btn_menu{
+	float: left;
+}
+
+.menu_item{
+	margin-top: 20px;
+	color: #8e8e8e;
+	font-size: 18px;
+}
+
+.menu_item i{
+	color: #767676;
+	margin-right: 15px;
+}
+
+.menu_item a{
+	color: #8e8e8e;
+	cursor: pointer;
 }
 
 /* CHECKBOX */

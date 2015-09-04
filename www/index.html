@@ -5,51 +5,50 @@
     <meta name="format-detection" content="telephone=no"/>
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
     
-    <title>ALPI</title>
-	<link href="css/index.css" rel="stylesheet" type="text/css">
+    <title>Turismo Rafaela</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	<link href="css/font-awesome.css" rel="stylesheet" type="text/css">    
     <link href="css/bootstrap-social.css" rel="stylesheet" type="text/css">
+    <link href="css/snap.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet" type="text/css">
+	<link href="css/reproductor_audio.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <body>
-    	<div>
-            <div class="borde_top">
-                <!-- top superior -->
-            </div>
-            <img src="img/top_muni.png" class="img-responsive">
-            <div class="col-md-12" style="margin: 10px; margin-top: 35px;">
-                <h3 class="color_letra_celeste"><b>Hola!</b></h3>
-                <p class="color_letra_gris_claro" style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Duis lacinia massa id lorem lobortis posue Lorem ipsum dolor sit 
-                amet, consectetur adipiscing elit.</p>
-                <div class="color_letra_gris_claro" style="margin-top: 50px;"> 
-                    <div style="float: left; margin-top: 3px;">
-                        <b>No volver a mostrar este mensaje</b>
-                     </div>
-                     <input type="checkbox" name="vehicle" value="Bike">
-                     <span class="span_check"></span>
-                </div>
-            </div>
-            <div  class="col-md-12" style="float:right; margin-top: 15px; margin-bottom: 60px; margin-right: 5px;">
-               <button type="button" class="btn btn-primary btn_celeste" onclick="avanza()" 
-                        style="border-radius: 40px; height: 40px; width: 40px; margin-left: 15px;">
-                    <span class="fa fa-chevron-right" style="padding-left: 2px;padding-top: 4px;"></span>
-                </button>
-            </div>
-            <div class="borde_bottom">
-                <img src="img/logo_largo_muni.png" class="img-responsive" style="max-height:30px; margin: auto; padding-top: 8px;">
-            </div>                
-        </div>  
-		<script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>		
-        <script type="text/javascript" src="js/jquery.js"></script>		
-        <script type="text/javascript" src="js/bootstrap.min.js"></script>	 
-        <script>
-			function avanza(){
-				window.open("punto.html","_self");
-			}
-		</script>                
-    </body>
+	<style>
+		.snapjs-left .snap-drawers {
+			display: block;
+		}
+		.snap-drawers {
+			display: none;
+			background-color:#FFF;
+		}
+		.snap-drawer{
+			background-color:#FFF;
+		}
+	</style>
+    <div id="menu"></div>
+    <div id="contenido_general" class="snap-content">
+	    <div id="cabecera"></div>
+	    <div id="contenido"></div>        
+        <div id="pie"></div>
+    </div>    
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>	
+    <script type="text/javascript" src="js/libs/jquery.js"></script>	
+    <script type="text/javascript" src="js/libs/jquery.touchSwipe.min.js"></script> 		
+    <script type="text/javascript" src="js/libs/bootstrap.min.js"></script>	
+    <script type="text/javascript" src="js/libs/reproductor_audio.js"></script> 
+    <script type="text/javascript" src="js/libs/snap.js"></script> 
+ 
+    <script>
+		$(document).ready(function() {	
+			app.initialize();				
+			insertar_html("views/pie.html", "pie");								
+			insertar_html("views/menu.html", "menu");
+			insertar_html("views/cabecera.html", "cabecera");
+			cambiar_contenido("views/saludo.html", "", false, true);			
+		});				
+	</script>
+    
 </body>
 </html>
