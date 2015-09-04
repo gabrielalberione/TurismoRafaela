@@ -37,15 +37,19 @@
 	}) (jQuery);
 	
 	function leer_qr(){
+		var splashLoading = document.getElementById('splashLoading');
+		splashLoading.style.display = 'block';		
 		cordova.plugins.barcodeScanner.scan(
 		  function (result) {
 			  alert("We got a barcode\n" +
 					"Result: " + result.text + "\n" +
 					"Format: " + result.format + "\n" +
 					"Cancelled: " + result.cancelled);
+			  splashLoading.style.display = 'none';
 		  }, 
 		  function (error) {
 			  alert("Scanning failed: " + error);
+			  splashLoading.style.display = 'none';
 		  }
 	   );
 	}
