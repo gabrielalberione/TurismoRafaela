@@ -45,6 +45,10 @@
 	
 	<!-- ESTADO DE CONEXION -->
 	<gap:plugin name="org.apache.cordova.network-information" version="0.2.12" />
+	
+	<gap:plugin name="com.phonegap.plugins.barcodescanner" version="2.2.0" />
+	<gap:plugin name="org.apache.cordova.media" version="0.2.13" />
+	
 	<!-- Android -->
 	<feature name="NetworkStatus">
     	<param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
