@@ -87,8 +87,8 @@ function setAudioPosition(position, duracion) {
 	$("#reproduccion_barra").width( Math.ceil(porc) + "%" );
 }
 
-$("#barra_completa_sonido").click(function(e){
+function adelantar_audio(){
 	var perc = e.offsetX/ $(this).width() * 100;
 	seconds = perc * duracion_sonido / 100;
-	my_media.seekTo(seconds*1000);
-});
+	my_media.seekTo(seconds*1000);	
+}
