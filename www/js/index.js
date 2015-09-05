@@ -42,8 +42,10 @@ function cambiar_contenido(pUrl, pCabecera, pMenu, pPie){
 	insertar_html(pUrl, "contenido");
 	if(pCabecera != ""){
 		$("#cabecera_titulo").html(pCabecera);
+		$('#contenido').css('margin-top', 60); // lugar de la cabecera
 	}else{
-		$("#cabecera").hide();		
+		$("#cabecera").hide();	
+		$('#contenido').css('margin-top', 0); // lugar de la cabecera	
 	}
 	
 	if(!pMenu){

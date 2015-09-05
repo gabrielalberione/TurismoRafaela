@@ -183,3 +183,31 @@ input[type='checkbox'] + span.span_check:after {
 input[type='checkbox']:checked + span.span_check:after {
     content: "\f046"; /* fontawesome checked box (fa-check-square-o) */
 }
+
+/* PUNTO */
+
+#punto_titulo{
+	color: #6939a6;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+#punto_info{
+	padding: 10px 20px;
+}
+
+.punto_foto_galeria{
+	height: 150px;
+	background-size: cover;
+	width: 100%;
+}
+
+.punto_icono_multimedia{
+	height: 24px !important;
+	width: 24px !important;
+	background-color: rgb(229, 229, 229);
+	padding: 3px;
+	border-radius: 20px;
+	float: right;
+	margin-top: 10px;
+}
