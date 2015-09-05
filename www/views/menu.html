@@ -29,13 +29,9 @@
 		disable: 'right'
 	});				
 	
-	(function($) {
-		$(document).ready(function() {										
-			$('#btn_menu').click(function(e) {
-				 snapper.open('left');  
-			});
-		});
-	}) (jQuery);
+	$('#btn_menu').click(function(e) {
+		 snapper.open('left');  
+	});
 	
 	function leer_qr(){
 		var splashLoading = document.getElementById('splashLoading');
