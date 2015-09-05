@@ -91,5 +91,4 @@ $("#barra_completa_sonido").click(function(e){
 	var perc = e.offsetX/ $(this).width() * 100;
 	seconds = perc * duracion_sonido / 100;
 	my_media.seekTo(seconds*1000);
-	alert("asda");
 });
