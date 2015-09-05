@@ -1,8 +1,6 @@
 <style>
-.my-gallery {
- width: 100%;	
-  float: left;
-  margin: 20px;
+.my-gallery {	
+
 }
 .my-gallery img {
   width: 100%;
@@ -12,7 +10,7 @@
   display: block;
   float: left;
   margin: 0 5px 5px 0;
-  width: 150px;
+  width: 100%;
 }
 .my-gallery figcaption {
   display: none;
@@ -24,48 +22,55 @@
 	<span id="punto_direccion">Bv. G. Lehmann 1003</span>        
 </div>
 <div class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
-
-    <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-      <a href="https://farm3.staticflickr.com/2567/5697107145_a4c2eaa0cd_o.jpg" itemprop="contentUrl" data-size="1024x1024">
-          <div class="col-xs-6 punto_foto_galeria" style="background-image: url('https://farm3.staticflickr.com/2567/5697107145_3c27ff3cd1_m.jpg');" itemprop="thumbnail" alt="Image description">
-          	<img src="img/iconos/camara.png" class="punto_icono_multimedia" />
-          	<img src="https://farm3.staticflickr.com/2567/5697107145_3c27ff3cd1_m.jpg" itemprop="thumbnail" alt="Image description" style="display:none;" />
-          </div>
-      </a>
-    <figcaption itemprop="caption description">Image caption  1</figcaption>
-                                          
-    </figure>
-    
-    <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-      <a href="https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg" itemprop="contentUrl" data-size="964x1024">
-          <div class="col-xs-6 punto_foto_galeria" style="background-image: url('https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_m.jpg');" itemprop="thumbnail" alt="Image description">
-          	<img src="img/iconos/camara.png" class="punto_icono_multimedia" />
-          	<img src="https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_m.jpg" itemprop="thumbnail" alt="Image description" style="display:none;" />
-          </div>
-      </a>
-      <figcaption itemprop="caption description">Image caption 2</figcaption>
-    </figure>
-    
-    <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-      <a href="https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg" itemprop="contentUrl" data-size="1024x683">
-          <div class="col-xs-6 punto_foto_galeria" style="background-image: url('https://farm7.staticflickr.com/6175/6176698785_7dee72237e_m.jpg');" itemprop="thumbnail" alt="Image description">
-          	<img src="img/iconos/camara.png" class="punto_icono_multimedia" />
-          	<img src="https://farm7.staticflickr.com/6175/6176698785_7dee72237e_m.jpg" itemprop="thumbnail" alt="Image description" style="display:none;" />
-          </div>
-      </a>
-      <figcaption itemprop="caption description">Image caption 3</figcaption>
-    </figure>
-    
-    <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-      <a href="https://farm6.staticflickr.com/5023/5578283926_822e5e5791_b.jpg" itemprop="contentUrl" data-size="1024x768">
-          <div class="col-xs-6 punto_foto_galeria" style="background-image: url('https://farm6.staticflickr.com/5023/5578283926_822e5e5791_m.jpg');" itemprop="thumbnail" alt="Image description">
-          	<img src="img/iconos/camara.png" class="punto_icono_multimedia" />
-          	<img src="https://farm6.staticflickr.com/5023/5578283926_822e5e5791_m.jpg" itemprop="thumbnail" alt="Image description" style="display:none;" />
-          </div>
-      </a>
-      <figcaption itemprop="caption description">Image caption 4</figcaption>
-    </figure>
-
+	<div class="col-xs-12">
+        <div class="col-xs-6 col-sm-4 col-md-3" style="padding: 5px;">
+            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+              <a href="https://farm3.staticflickr.com/2567/5697107145_a4c2eaa0cd_o.jpg" itemprop="contentUrl" data-size="1024x1024">
+                  <div class="punto_foto_galeria" style="background-image: url('https://farm3.staticflickr.com/2567/5697107145_3c27ff3cd1_m.jpg');" itemprop="thumbnail" alt="Image description">
+                    <img src="img/iconos/camara.png" class="punto_icono_multimedia" />
+                    <img src="https://farm3.staticflickr.com/2567/5697107145_3c27ff3cd1_m.jpg" itemprop="thumbnail" alt="Image description" style="display:none;" />
+                  </div>
+              </a>
+            <figcaption itemprop="caption description">Image caption  1</figcaption>
+            </figure>                                      
+        </div>
+        
+        <div class="col-xs-6 col-sm-4 col-md-3" style="padding: 5px;">
+            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+              <a href="https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg" itemprop="contentUrl" data-size="964x1024">
+                  <div class="punto_foto_galeria" style="background-image: url('https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_m.jpg');" itemprop="thumbnail" alt="Image description">
+                    <img src="img/iconos/camara.png" class="punto_icono_multimedia" />
+                    <img src="https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_m.jpg" itemprop="thumbnail" alt="Image description" style="display:none;" />
+                  </div>
+              </a>
+              <figcaption itemprop="caption description">Image caption 2</figcaption>
+            </figure>
+        </div>
+            
+        <div class="col-xs-6 col-sm-4 col-md-3" style="padding: 5px;">
+            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+              <a href="https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg" itemprop="contentUrl" data-size="1024x683">
+                  <div class="punto_foto_galeria" style="background-image: url('https://farm7.staticflickr.com/6175/6176698785_7dee72237e_m.jpg');" itemprop="thumbnail" alt="Image description">
+                    <img src="img/iconos/camara.png" class="punto_icono_multimedia" />
+                    <img src="https://farm7.staticflickr.com/6175/6176698785_7dee72237e_m.jpg" itemprop="thumbnail" alt="Image description" style="display:none;" />
+                  </div>
+              </a>
+              <figcaption itemprop="caption description">Image caption 3</figcaption>
+            </figure>
+        </div>
+            
+        <div class="col-xs-6 col-sm-4 col-md-3" style="padding: 5px;">
+            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+              <a href="https://farm6.staticflickr.com/5023/5578283926_822e5e5791_b.jpg" itemprop="contentUrl" data-size="1024x768">
+                  <div class="punto_foto_galeria" style="background-image: url('https://farm6.staticflickr.com/5023/5578283926_822e5e5791_m.jpg');" itemprop="thumbnail" alt="Image description">
+                    <img src="img/iconos/camara.png" class="punto_icono_multimedia" />
+                    <img src="https://farm6.staticflickr.com/5023/5578283926_822e5e5791_m.jpg" itemprop="thumbnail" alt="Image description" style="display:none;" />
+                  </div>
+              </a>
+              <figcaption itemprop="caption description">Image caption 4</figcaption>
+            </figure>
+        </div>
+	</div>        
 </div>
 
 <!-- GALERIA - Root element of PhotoSwipe. Must have class pswp. -->
@@ -135,7 +140,7 @@
 </div>
 
 <div id="reproductor">
-    <div id="barra_completa_sonido" onClick="adelantar_audio()" style="bottom: 80px;width: 100%;position: fixed;height: 5px;background-color: #C9D5D7;">
+    <div id="barra_completa_sonido" style="bottom: 80px;width: 100%;position: fixed;height: 5px;background-color: #C9D5D7;">
         <div id="reproduccion_barra">
         </div>
     </div>			
@@ -153,7 +158,8 @@
 	var audio_src = "file:///android_asset/www/audios/madre.mp3";
 	$("#foot_contenido_extra").html($("#reproductor").html());
 	$("#reproductor").html("");
-	
+	document.getElementById('barra_completa_sonido').onclick = adelantar_audio;
+
 	var initPhotoSwipeFromDOM = function(gallerySelector) {
 
     // parse slide data (url, title, size ...) from DOM elements 
