@@ -26,11 +26,16 @@
 		element: document.getElementById('contenido_general'),
 		dragger: null,
 		touchToDrag: false,
+		transitionSpeed: 0.00001,
 		disable: 'right'
 	});				
 	
 	function abrir_menu(){
-		 snapper.open('left');  
+		 if( snapper.state().state=="left" ){
+				snapper.close();
+		} else {
+			snapper.open('left');
+		} 
 	}
 	
 	function leer_qr(){

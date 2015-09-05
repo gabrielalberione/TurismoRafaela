@@ -211,3 +211,14 @@ input[type='checkbox']:checked + span.span_check:after {
 	float: right;
 	margin-top: 10px;
 }
+
+#punto_sub_titulo{
+	color: #666666;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+#punto_direccion{
+	color: #7f7f7f;
+	font-size: 13px;
+}
