@@ -66,7 +66,15 @@
 			insertar_html("views/pie.html", "pie");								
 			insertar_html("views/menu.html", "menu");
 			insertar_html("views/cabecera.html", "cabecera");
-			cambiar_contenido("views/saludo.html", "", false, true);			
+			var ult_web = window.localStorage.getItem("ultima_web");
+			if(ult_web == null){
+				cambiar_contenido("views/saludo.html", "", false, true);			
+			}else{
+				var ult_web_menu = window.localStorage.getItem("ultima_web_menu");			
+				var ult_web_pie = window.localStorage.getItem("ultima_web_pie");			
+				var ult_web_cabecera = window.localStorage.getItem("ultima_web_cabecera");			
+				cambiar_contenido(ult_web, ult_web_cabecera, ult_web_menu, ult_web_pie);			
+			}
 		});				
 	</script>
     
