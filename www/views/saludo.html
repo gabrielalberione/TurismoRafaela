@@ -10,12 +10,16 @@
             Duis lacinia massa id lorem lobortis posue Lorem ipsum dolor sit 
             amet, consectetur adipiscing elit.</p>
             <div class="color_letra_gris_claro" style="margin-top: 50px;"> 
-                <div style="float: left; margin-top: 3px;">
+                <div style="float:left;">
                     <b>No volver a mostrar este mensaje</b>
-                 </div>
-                 <input type="checkbox" name="vehicle" value="Bike" />
-                 <span class="span_check"></span>
-            </div>
+                </div>
+                <section style="float:left;">
+                    <div class="checkboxFive" style="margin: -3px 13px;">
+                        <input type="checkbox" value="1" id="checkboxFiveInput" name=""  onClick="no_volver_a_mostrar()" />
+                        <label for="checkboxFiveInput"></label>
+                    </div>
+                </section>            
+			</div>
         </div>
         <div  class="col-md-12" style="float:right; margin-top: 15px; margin-bottom: 60px; margin-right: 5px;">
            <button type="button" class="btn btn-primary btn_celeste" onclick="avanza()" 
@@ -25,8 +29,18 @@
         </div>                
     </div> 
     <script>
+		var no_mostrar_mas = false;
 		function avanza(){
+			window.localStorage.setItem("saltear_saludo", no_mostrar_mas);
 			cambiar_contenido("views/punto.html", "Recorrido", true, true);
+		}
+		
+		function no_volver_a_mostrar(){
+			if(no_mostrar_mas){
+				no_mostrar_mas = false;
+			}else{
+				no_mostrar_mas = true;
+			}
 		}
 	</script>
 </html>

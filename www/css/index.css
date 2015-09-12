@@ -171,22 +171,54 @@ a{
 
 /* CHECKBOX */
 
-.span_check{
-	 font-family: FontAwesome;
-	 font-size: 20px;
+input[type=checkbox] {
+	visibility: hidden;
 }
 
-input[type='checkbox'] {     
-    position: relative;
-    left: -999em; /* hide the real checkbox */
+.checkboxFive {
+	width: 25px;
+	position: relative;
 }
 
-input[type='checkbox'] + span.span_check:after {
-    content: "\f096"; /* In fontawesome, is an open square (fa-square-o) */
+.checkboxFive label {
+	cursor: pointer;
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	top: 0;
+  	left: 0;
+	background: #eee;
+	border:1px solid #ddd;
 }
-input[type='checkbox']:checked + span.span_check:after {
-    content: "\f046"; /* fontawesome checked box (fa-check-square-o) */
+
+.checkboxFive label:after {
+	opacity: 0.2;
+	content: '';
+	position: absolute;
+	width: 9px;
+	height: 5px;
+	background: transparent;
+	top: 6px;
+	left: 7px;
+	border: 3px solid #333;
+	border-top: none;
+	border-right: none;
+
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
 }
+
+.checkboxFive label:hover::after {
+	opacity: 0.5;
+}
+
+.checkboxFive input[type=checkbox]:checked + label:after {
+	opacity: 1;
+}
+  
 
 /* PUNTO */
 
