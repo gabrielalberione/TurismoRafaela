@@ -77,15 +77,17 @@
 	function testDescarga(){
 		var fileTransfer = new FileTransfer();
 		var uri = encodeURI("http://n9000468.ferozo.com/sitio/files/multimedias/91.jpg");
-		var fileURL = "TR" + "91.jpg"; 
+		var fileURL = "TR/" + "91.jpg"; 
 		
 		fileTransfer.download(
 			uri,
 			fileURL,
 			function(entry) {
+				alert("complete");
 				console.log("download complete: " + entry.toURL());
 			},
 			function(error) {
+				alert("upload error code" + error.code);
 				console.log("download error source " + error.source);
 				console.log("download error target " + error.target);
 				console.log("upload error code" + error.code);
