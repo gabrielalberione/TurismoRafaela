@@ -45,6 +45,12 @@
 	
 	<!-- ESTADO DE CONEXION -->
 	<gap:plugin name="org.apache.cordova.network-information" version="0.2.12" />
+
+	<!-- FILE TRANSFER (DOWNLOAD AND UPLOAD FILES) -->
+	<gap:plugin name="org.apache.cordova.file-transfer" version="0.4.6" />
+
+	<!-- FILE (ACCESO A ARCHIVOS) -->
+	<gap:plugin name="org.apache.cordova.file" version="1.3.1" />
 	
 	<gap:plugin name="com.phonegap.plugins.barcodescanner" version="2.2.0" />
 	<gap:plugin name="org.apache.cordova.media" version="0.2.13" />

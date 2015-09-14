@@ -54,6 +54,7 @@
                   </div>
               </a>
 	    </div>
+        <div onClick="testDescarga()"> probar descargar y guardar archivo en sd </div>
 	</div>            
 </div>
 
@@ -73,6 +74,30 @@
 </div>
                  		 
 <script>
+	function testDescarga(){
+		var fileTransfer = new FileTransfer();
+		var uri = encodeURI("http://n9000468.ferozo.com/sitio/files/multimedias/91.jpg");
+		
+		fileTransfer.download(
+			uri,
+			fileURL,
+			function(entry) {
+				console.log("download complete: " + entry.toURL());
+			},
+			function(error) {
+				console.log("download error source " + error.source);
+				console.log("download error target " + error.target);
+				console.log("upload error code" + error.code);
+			},
+			false,
+			{
+				headers: {
+					"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+				}
+			}
+		);		
+	}
+
 	function abrir_video(nombre){
 		window.location.href = "img/"+nombre;
 	}
