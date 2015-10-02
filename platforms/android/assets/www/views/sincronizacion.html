@@ -1,0 +1,214 @@
+<html>
+    <div id="sincronizacion_configuracion">
+        <!--<img src="img/top_muni_mini.png" class="img-responsive" />-->
+        <div class="col-md-12" style="margin: 10px; margin-top: 35px;">
+        	<div class="col-md-12">
+                <h4 class="color_letra_celeste"><b>Hay nueva infomación para descargarte!</b></h4>
+                <p class="color_letra_gris_claro" style="text-align: justify; font-size: 14px; margin-bottom: 20px;">Seleccione que desea tener en su celular:</p>
+           	</div>
+            <div class="col-md-12 sincronizacion_opciones">
+            	<div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-align-left"></i>Textos</div>
+            	<div class="switch" style="float:right;">
+                    <input id="cmn-toggle-1" onClick="descargar_textos()" class="cmn-toggle cmn-toggle-round" type="checkbox" checked>
+                    <label for="cmn-toggle"></label>
+                </div> 
+            </div>
+            <div class="col-md-12 sincronizacion_opciones">
+            	<div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-volume-up"></i>Audios</div>
+            	<div class="switch" style="float:right;">
+                    <input id="cmn-toggle-2" onClick="descargar_audios()" class="cmn-toggle cmn-toggle-round" type="checkbox">
+                    <label for="cmn-toggle-2"></label>
+                </div> 
+            </div>
+            <div class="col-md-12 sincronizacion_opciones">
+            	<div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-picture-o"></i>Imagenes</div>
+            	<div class="switch" style="float:right;">
+                    <input id="cmn-toggle-3" class="cmn-toggle cmn-toggle-round" type="checkbox" onClick="descargar_imagenes()">
+                    <label for="cmn-toggle-3"></label>
+                </div> 
+            </div>
+            <div class="col-md-12 sincronizacion_opciones">
+            	<div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-video-camera"></i>Videos</div>
+            	<div class="switch" style="float:right;">
+                    <input id="cmn-toggle-4" onClick="descargar_videos()" class="cmn-toggle cmn-toggle-round" type="checkbox">
+                    <label for="cmn-toggle-4"></label>
+                </div> 
+            </div>
+            <div class="col-md-12">
+	            <button onClick="sincronizar()" type="button" class="btn btn-primary" style="background-color:#62A241; border-color:#62A241; margin: auto; border-radius: 60px; width: 100%; margin-top: 15px;">Sincronizar</button>
+            </div>
+         </div>
+    </div>
+    <div id="sincronizacion_descargando" style="display:none; margin-top: 40px">
+		<div class="col-md-12" style="text-align:center;">
+            <h4 class="color_letra_celeste"><b>Descargando contenido!</b></h4>
+            <p class="color_letra_gris_claro" style="font-size: 14px; margin-bottom: 20px;">Por favor espere un momento...</p>
+        </div>    
+    	<div class="cssload-wraper">
+            <div class="cssload-dots"></div>
+        </div>
+        <div class="col-md-12" style="text-align:center;">
+        	<p id="estado_descarga" class="color_letra_gris_claro"></p>
+            <div id="descargando_barra"><span id="descargando_barra_poc"></span></div>
+        </div> 
+    </div>
+</html>
+
+<script>
+	var permitir_descargar_audios = false;
+	var permitir_descargar_imagenes = false;
+	var permitir_descargar_videos = false;	
+		
+	function sincronizar(){		
+		$("#sincronizacion_configuracion").hide();
+		$("#sincronizacion_descargando").show();	
+		$("#estado_descarga").html("Descargando recorridos...");
+		
+		/* Descargamos los recorridos y lo guardamos en la sd */
+		var fileTransfer = new FileTransfer();	
+		fileTransfer.download(urlHost+urlRecorridos, urlSd + jsonRecorridos, 
+		function(entry) {		
+			$("#estado_descarga").html("Descargando punto...");
+			descargar_puntos(urlSd + jsonRecorridos);
+		}, 
+		function(err) {
+			console.log("Error");
+			$("#estado_descarga").html("Error en descarga...");
+		});		
+		
+		//iniciarApp();
+	}
+	
+	var list_descargas = [[]];
+	var cantidad_descargas = 0;
+	var iterador = 0;
+		list_descargas[iterador] = [];
+	
+	function descargar_puntos(urlJson){
+		var recorrido_id = "";	
+		console.log("cantidad list_descargas: "+urlJson);
+		$.getJSON(urlJson, function( data ) {			
+			$.each( data, function( key, item ) {
+				recorrido_id = item.id; 
+				//console.log("cantidad list_descargas: "+item.titulo);
+				var urlDestino = urlSd + recorrido_id +"/"+"puntos.json";
+				recorrido_id_encriptado = encrypt(String(recorrido_id), String(clave_encriptacion));
+				list_descargas[iterador][0] = urlHost+"/entidades/listar/layer:"+recorrido_id_encriptado;
+				list_descargas[iterador][1] = urlDestino;
+				list_descargas[iterador][2] = "puntos de "+item.titulo;
+				list_descargas[iterador][3] = true;	// buscar multimedia?
+				++iterador;				
+				list_descargas[iterador] = [];			
+			});
+			cantidad_descargas = iterador;
+			iterador = -1;
+			descargar(iniciarApp);
+		});
+	}
+	
+	function buscar_multimedias(posicion){
+		//++cantidad_descargas;
+		$.getJSON(list_descargas[posicion][1], function( data ) {			
+			$.each( data, function( key, itemaux ) {			
+				$.each( itemaux.multimedias, function( subkey, subitem ) {
+					if(subitem.tipo != 4){
+						var permitir_descarga = true;
+						if((subitem.tipo == 0) && (permitir_descargar_imagenes == false)){
+							permitir_descarga = false;
+						}
+						if((subitem.tipo == 2) && (permitir_descargar_videos == false)){
+							permitir_descarga = false;
+						}
+						if((subitem.tipo == 1) && (permitir_descargar_audios == false)){
+							permitir_descarga = false;
+						}
+						if(permitir_descarga){
+							var punto_id = subitem.entidad_id; 
+							var recorrido_id = subitem.layer_id; 	
+							var nombre_multimedia = subitem.codigo; 
+							var url_origen =  subitem.url+"/"+nombre_multimedia; 											
+							var urlDestino = urlSd + recorrido_id +"/"+punto_id+"/"+nombre_multimedia;	
+							list_descargas[cantidad_descargas] = new Array();
+							list_descargas[cantidad_descargas][0] = url_origen;
+							list_descargas[cantidad_descargas][1] = urlDestino;
+							list_descargas[cantidad_descargas][2] = "multimedias del punto: "+itemaux.titulo;					
+							list_descargas[cantidad_descargas][3] = false;	// buscar multimedia?
+							++cantidad_descargas;	
+						}
+					}
+				});
+			});
+		});	
+	}
+	
+	function descargar(metodoSiguiente){
+		++iterador;
+		if(iterador < cantidad_descargas){
+			$("#estado_descarga").html("Descargando "+list_descargas[iterador][2]);
+			var fileTransfer = new FileTransfer();		
+			var loadingStatus = 0;
+			fileTransfer.onprogress = function(progressEvent) {
+				if (progressEvent.lengthComputable) {
+					var perc = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+					$("#descargando_barra").width( Math.ceil(perc) + "%" );
+					//$("#descargando_barra_porc").html(String(Math.ceil(perc)) + "%");
+					
+					//statusDom.innerHTML = perc + "% loaded...";
+					//loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
+					loadingStatus = progressEvent.loaded / progressEvent.total;
+				} else {
+					//loadingStatus.increment();
+					loadingStatus++;
+				}
+			};
+			console.log("holaaaa: "+list_descargas[iterador][0]);
+			fileTransfer.download(list_descargas[iterador][0], list_descargas[iterador][1], 
+			function(entry) {		
+				if(list_descargas[iterador][3] == true){
+					buscar_multimedias(iterador);
+				}
+		
+				descargar(metodoSiguiente);
+			}, 
+			function(err) {
+				res = false;
+				console.log("Error");
+				$("#estado_descarga").html("Error en descarga...");
+			},
+			false,
+			{
+				headers: {
+					"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+				}
+			});	
+		}else{
+			list_descargas = [[]];
+			iterador = 0;
+			metodoSiguiente();		
+		}
+	}
+
+	function descargar_audios(){		
+		if(permitir_descargar_audios == false){
+			permitir_descargar_audios = true;
+		}else{
+			permitir_descargar_audios = false;			
+		}
+	}
+	
+	function descargar_imagenes(){				
+		if(permitir_descargar_imagenes == false){
+			permitir_descargar_imagenes = true;
+		}else{
+			permitir_descargar_imagenes = false;			
+		}
+	}
+	
+	function descargar_videos(){		
+		if(permitir_descargar_videos == false){
+			permitir_descargar_videos = true;
+		}else{
+			permitir_descargar_videos = false;			
+		}
+	}		
+</script>

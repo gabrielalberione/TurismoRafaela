@@ -1,0 +1,24 @@
+<div class="subtop_contenido">
+	Guías
+</div>
+<p class="color_letra_gris_claro" style="text-align: justify; font-size: 14px; margin: 20px 10px;">Seleccione un recorrido y disfute de una experiencia interactiva en la ciudad de Rafaela.</p>
+<div id="recorridos_listado">
+</div>
+<script>
+	cargar_recorridos();
+	
+	function cargar_recorridos(){
+		var contenido_list = "";
+		$.getJSON(urlSd + jsonRecorridos, function( data ) {			
+			var items = [];
+			$.each( data, function( key, item ) {
+				contenido_list += "<div class='col-xs-12'>";
+				contenido_list += "<img class='recorrido_icono' src='http://200.58.108.122/gis/files/icons_layers/'"+item.icono+" />";
+				contenido_list += "<div class='recorrido color_letra_gris_claro'><span class='recorrido_titulo'>"+item.titulo+"</span><br>";
+				contenido_list += "<span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>";
+				contenido_list += "</div>";
+				$("#recorridos_listado").html(contenido_list);			
+			});
+		});
+	}
+</script>
