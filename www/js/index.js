@@ -1,8 +1,16 @@
 var urlHost = 'http://200.58.108.122/gis/ws';
-var urlRecorridos = '/layers/listar/grouplayer:amWX';
-var urlCheckearActualizaciones = '/turismo/actualizaciondisponible/';
+
+var grouplayer_id = '125';
+var urlGetGroupLayer = '/layers/listar/grouplayer:';
 var jsonRecorridos = "recorridos.json";
+
+var urlGetLayer = '/entidades/listar/layer:';
+var urlLayerIconos = 'http://200.58.108.122/gis/files/icons_layers/';
+
+var urlCheckearActualizaciones = '/turismo/actualizaciondisponible/';
+
 var clave_encriptacion = "93bt0QWJ";
+
 
 var app = {
     // Application Constructor
@@ -45,7 +53,18 @@ function insertar_html(pUrl, div_id){
 
 var textCabecera;
 
+function ir_a_punto(recorrido_id, punto_id){
+	window.localStorage.setItem("recorrido_activo_id", recorrido_id);
+	window.localStorage.setItem("punto_activo_id", punto_id);
+	cambiar_contenido("views/punto.html", "Recorrido", "true", "true");
+}
+
+
 function cambiar_contenido(pUrl, pCabecera, pMenu, pPie){
+	window.localStorage.setItem("ultima_web", pUrl);
+	window.localStorage.setItem("ultima_web_menu", pPie);
+	window.localStorage.setItem("ultima_web_pie", pMenu);
+	window.localStorage.setItem("ultima_web_cabecera", pCabecera);	
 	$("#cabecera").show();
 	$("#menu").show();
 	$("#pie").show();

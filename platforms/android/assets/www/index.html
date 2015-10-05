@@ -169,7 +169,7 @@
 			$.getJSON(urlHost+urlCheckearActualizaciones+"fecha:2018-09-27", function( data ) {			
 				var items = [];
 				$.each( data, function( key, item ) {					
-					if(item.resultado=="false"){
+					if(item.resultado==false){
 						iniciarApp();
 					}else{
 						cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);					

@@ -66,7 +66,8 @@
 		
 		/* Descargamos los recorridos y lo guardamos en la sd */
 		var fileTransfer = new FileTransfer();	
-		fileTransfer.download(urlHost+urlRecorridos, urlSd + jsonRecorridos, 
+		var grouplayer_encriptado = encrypt(String(grouplayer_id), String(clave_encriptacion));		
+		fileTransfer.download(urlHost+urlGetGroupLayer+grouplayer_encriptado, urlSd + jsonRecorridos, 
 		function(entry) {		
 			$("#estado_descarga").html("Descargando punto...");
 			descargar_puntos(urlSd + jsonRecorridos);
@@ -93,12 +94,22 @@
 				//console.log("cantidad list_descargas: "+item.titulo);
 				var urlDestino = urlSd + recorrido_id +"/"+"puntos.json";
 				recorrido_id_encriptado = encrypt(String(recorrido_id), String(clave_encriptacion));
-				list_descargas[iterador][0] = urlHost+"/entidades/listar/layer:"+recorrido_id_encriptado;
+				list_descargas[iterador][0] = urlHost+urlGetLayer+recorrido_id_encriptado;
 				list_descargas[iterador][1] = urlDestino;
 				list_descargas[iterador][2] = "puntos de "+item.titulo;
 				list_descargas[iterador][3] = true;	// buscar multimedia?
 				++iterador;				
-				list_descargas[iterador] = [];			
+				list_descargas[iterador] = [];	
+				
+				// descargamos el icono del layer
+				var urlDestino = urlSd + recorrido_id +"/"+item.icono;
+				recorrido_id_encriptado = encrypt(String(recorrido_id), String(clave_encriptacion));
+				list_descargas[iterador][0] = urlLayerIconos+item.icono;
+				list_descargas[iterador][1] = urlDestino;
+				list_descargas[iterador][2] = "icono de "+item.titulo;
+				list_descargas[iterador][3] = false;	// buscar multimedia?
+				++iterador;				
+				list_descargas[iterador] = [];							
 			});
 			cantidad_descargas = iterador;
 			iterador = -1;

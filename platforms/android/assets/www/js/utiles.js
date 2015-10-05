@@ -1,3 +1,7 @@
+function toogle_div(id_div){
+	$("#"+id_div).toggle();
+}
+
 function encrypt(string, key) {
 	var result = '';
 	/* recorre cada caracter del string */

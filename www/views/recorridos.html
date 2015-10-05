@@ -1,24 +1,61 @@
 <div class="subtop_contenido">
 	Guías
 </div>
-<p class="color_letra_gris_claro" style="text-align: justify; font-size: 14px; margin: 20px 10px;">Seleccione un recorrido y disfute de una experiencia interactiva en la ciudad de Rafaela.</p>
+<div class='col-xs-12'>
+	<p class="color_letra_gris_claro" style="text-align: justify; font-size: 15px; margin: 15px;">Seleccione un recorrido y disfute de una experiencia interactiva en la ciudad de Rafaela.</p>
+</div>   
 <div id="recorridos_listado">
 </div>
 <script>
 	cargar_recorridos();
+	var recorridos = [];
+	var i = 0;
 	
 	function cargar_recorridos(){
-		var contenido_list = "";
 		$.getJSON(urlSd + jsonRecorridos, function( data ) {			
-			var items = [];
+			var contenido_list = "";
 			$.each( data, function( key, item ) {
-				contenido_list += "<div class='col-xs-12'>";
-				contenido_list += "<img class='recorrido_icono' src='http://200.58.108.122/gis/files/icons_layers/'"+item.icono+" />";
-				contenido_list += "<div class='recorrido color_letra_gris_claro'><span class='recorrido_titulo'>"+item.titulo+"</span><br>";
-				contenido_list += "<span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>";
+				recorridos[i] = item.id;
+				//console.log("recorrido: "+item.id);
+				i++;
+				contenido_list += "<div class='col-xs-12 row' style='padding: 0px;'>";
+				contenido_list += "<div class='col-xs-3' onClick='cargar_puntos("+item.id+")'>";
+				contenido_list += "<img  style='width: 50%; height: 50%' class='recorrido_icono' src='"+urlSd+item.id+"/"+item.icono+"' />";
 				contenido_list += "</div>";
-				$("#recorridos_listado").html(contenido_list);			
-			});
-		});
+				contenido_list += "<div class='col-xs-9' onClick='cargar_puntos("+item.id+")' style='padding: 0px;'>";
+				contenido_list += "<div class='recorrido borde_bottom_gris color_letra_gris_claro'>";
+				contenido_list += "<span class='recorrido_titulo'>"+item.titulo+"</span><br>";
+				contenido_list += "<span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>";
+	            contenido_list += "</div>";								
+				contenido_list += "<div id='recorrido_puntos_"+item.id+"' style='display:none;'></div>";
+                contenido_list += "</div>";								
+			});			
+			$("#recorridos_listado").html(contenido_list);										
+		});			
 	}
+	
+	function cargar_puntos(recorrido_id){
+		$.getJSON(urlSd + recorrido_id +"/"+"puntos.json", function( subdata ) {								
+			var sub_contenido_list = "";																
+			$.each( subdata, function( subkey, subitem ) {   
+				sub_contenido_list += "<div class='col-xs-3' style='padding: 0px;'></div>";
+				sub_contenido_list += "<div class='col-xs-9 borde_bottom_gris' style='padding: 0px;'>";
+				sub_contenido_list += "<table style='width: 100%; margin: 10px 0px;' onClick='ir_a_punto("+recorrido_id+","+subitem.id+")'>";
+				sub_contenido_list += "<tr>";
+				sub_contenido_list += "<td style='width:80%;'>";
+				sub_contenido_list += "<span class='recorrido_titulo'>"+subitem.titulo+"</span><br>";
+				sub_contenido_list += "<span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>";
+				sub_contenido_list += "</td>";
+				sub_contenido_list += "<td rowspan='2' style='vertical-align: middle;'>";
+				sub_contenido_list += "<img style='height: 50px;' src='img/flecha_derecha.png' />";
+				sub_contenido_list += "</td></tr></table>";
+				sub_contenido_list += "</div>";				
+				//console.log(recorrido_id+" - "+subitem.titulo);
+			});
+			$("#recorrido_puntos_"+recorrido_id).html(sub_contenido_list);	
+			toogle_div("recorrido_puntos_"+recorrido_id);
+		});						
+	}	
+	
+
 </script>

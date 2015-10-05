@@ -49,7 +49,67 @@
     <div id="menu"></div>
     <div id="contenido_general">
 	    <div id="cabecera"></div>
-	    <div id="contenido"  class="snap-content"></div>        
+	    <div id="contenido"  class="snap-content">
+        	<div class="subtop_contenido">
+                Guías
+            </div>
+            <div class='col-xs-12'>
+                <p class="color_letra_gris_claro" style="text-align: justify; font-size: 15px; margin: 15px;">Seleccione un recorrido y disfute de una experiencia interactiva en la ciudad de Rafaela.</p>
+            </div>   
+            <div id="recorridos_listado">
+            	<div class='col-xs-12 row' style="padding: 0px;">
+                	<div class='col-xs-3' onClick="toogle_div('recorrido_puntos')">
+						<img  style="width: 50%; height: 50%" class='recorrido_icono' src='http://200.58.108.122/gis/files/icons_layers/recorridocircuitochico.png' />
+                    </div>
+                	<div class='col-xs-9' onClick="toogle_div('recorrido_puntos')" style="padding: 0px;">
+                        <div class='recorrido borde_bottom_gris color_letra_gris_claro'><span class='recorrido_titulo'>Circuito Chico</span><br>
+                        <span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>
+                    </div>
+                    <div id="recorrido_puntos" style="display:block;">
+                        <div class='col-xs-3' style="padding: 0px;">
+                        </div>                    
+                        <div class='col-xs-9 borde_bottom_gris' style="padding: 0px;">
+                            <div class='col-xs-9 recorrido_punto color_letra_gris_claro'><span class='recorrido_titulo'>Circuito Chico ssadsadas sadad sad sadsadas</span><br>
+                            <span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>
+                            <div class='col-xs-3' style="padding: 0px;"><img class='recorrido_img_punto' src='img/flecha_derecha.png' /></div>
+                        </div>                        
+                        <div class='col-xs-3' style="padding: 0px;">
+                        </div>                    
+                        <div class='col-xs-9 borde_bottom_gris' style="padding: 0px;">
+                        	<table style="width: 100%; margin: 10px 0px;">
+                            	<tr>
+                                	<td style="width:80%;">
+                                    	<span class='recorrido_titulo'>Circuito Chico ssadsadas sadad sad sadsadas</span><br>
+	                                    <span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span>
+                                    </td>
+                                    <td rowspan="2" style="vertical-align: middle;">
+                                    	<img style='height: 50px;' src='img/flecha_derecha.png' />
+                                    </td>
+                                <tr>
+                            </table>
+                        </div>                        
+                    </div>
+				</div>					
+            	<div class='col-xs-12 row' style="padding: 0px;">
+                	<div class='col-xs-3'>
+						<img class='recorrido_icono' src='http://200.58.108.122/gis/files/icons_layers/recorridocircuitochico.png' />
+                    </div>
+                	<div class='col-xs-9' style="padding: 0px;">
+                        <div class='recorrido borde_bottom_gris color_letra_gris_claro'><span class='recorrido_titulo'>Circuito Chico</span><br>
+                        <span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>
+                    </div>
+				</div>	
+            	<div class='col-xs-12 row' style="padding: 0px;">
+                	<div class='col-xs-3 '>
+						<img class='recorrido_icono' src='http://200.58.108.122/gis/files/icons_layers/recorridocircuitochico.png' />
+                    </div>
+                	<div class='col-xs-9' style="padding: 0px;">
+                        <div class='recorrido borde_bottom_gris color_letra_gris_claro'><span class='recorrido_titulo'>Circuito Chico</span><br>
+                        <span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>
+                    </div>
+				</div>	                				
+            </div>
+        </div>        
     </div>    
     <div id="pie"></div>
     
@@ -130,59 +190,4 @@
  	<!-- GALERIA -->
     <script type="text/javascript" src="js/libs/photoswipe.min.js"></script> 
     <script type="text/javascript" src="js/libs/photoswipe-ui-default.min.js"></script> 
-    
-    <script>
-		//alert(encrypt("1363","93bt0QWJ"));
-		var urlSd = "";
-		var archivoActivo = "";	
-		app.initialize();
-		var datos_a_sincronizar = true;
-		$(document).ready(function() {							
-			urlSd = cordova.file.externalDataDirectory + "GuiaR/";
-			insertar_html("views/pie.html", "pie");								
-			insertar_html("views/menu.html", "menu");
-			insertar_html("views/cabecera.html", "cabecera");
-//			 window.localStorage.clear();		
-			verificar_recorridos();						
-		});		
-		
-		function iniciarApp(){
-			var ult_web = window.localStorage.getItem("ultima_web");
-			var saltear_saludo = window.localStorage.getItem("saltear_saludo");
-			if((ult_web == null)||(saltear_saludo == null)||(saltear_saludo == "false")){
-				cambiar_contenido("views/saludo.html", "", false, true);			
-			}else{
-				var ult_web_menu = window.localStorage.getItem("ultima_web_menu");			
-				var ult_web_pie = window.localStorage.getItem("ultima_web_pie");			
-				var ult_web_cabecera = window.localStorage.getItem("ultima_web_cabecera");			
-				cambiar_contenido(ult_web, ult_web_cabecera, ult_web_menu, ult_web_pie);			
-			}
-		}
-		
-		function verificar_recorridos(){
-			archivoActivo =  "recorridos.json";		
-			window.resolveLocalFileSystemURL(urlSd + archivoActivo, existeArchivo, descargarArchivo); 
-		}
-		
-		//
-		function existeArchivo() {			
-			$.getJSON(urlHost+urlCheckearActualizaciones+"fecha:2018-09-27", function( data ) {			
-				var items = [];
-				$.each( data, function( key, item ) {					
-					if(item.resultado==false){
-						iniciarApp();
-					}else{
-						cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);					
-					}
-				});
-			});			
-			//cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);					
-		}
-		
-		function descargarArchivo(){
-			cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);	
-		}				
-	</script>
-    
 </body>
-</html>

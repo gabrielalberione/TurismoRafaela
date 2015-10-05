@@ -17,8 +17,8 @@
 }
 </style>
 <div id="punto_info">
-	<span id="punto_titulo">8. Castillo de Foti</span><br><br>
-	<span id="punto_sub_titulo">Edificio histórico - testimonial</span><br>
+	<span id="punto_titulo"></span><br><br>
+	<span id="punto_sub_titulo"></span><br>
 	<span id="punto_direccion">Bv. G. Lehmann 1003</span>        
 </div>
 <div class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
@@ -46,15 +46,14 @@
               <figcaption itemprop="caption description">Image caption 2</figcaption>
             </figure>
         </div>                        
-         <div class="col-xs-12 col-sm-8 col-md-6" style="padding: 5px;">
+        <div class="col-xs-12 col-sm-8 col-md-6" style="padding: 5px;">
               <a onClick="abrir_video('demo.mp4')">
                   <div class="punto_foto_galeria" style="background-image: url('img/1.jpg');" alt="Image description">
                     <img src="img/iconos/video.png" class="punto_icono_multimedia" />
                     <img src="img/1.jpg"  alt="Image description" style="display:none;" />
                   </div>
               </a>
-	    </div>
-        <div onClick="testDescarga()"> probar descargar y guardar archivo en sd </div>
+	    </div>        
 	</div>            
 </div>
 
@@ -72,55 +71,53 @@
         <a href="javascript:stopAudio();"><i class="fa fa-stop botones_reproduccion"></i></a>	
     </div>
 </div>
-                 		 
-<script>
-	function testDescarga(){
-		var fileTransfer = new FileTransfer();
-		var uri = encodeURI("http://n9000468.ferozo.com/sitio/files/multimedias/91.jpg");
-		var fileURL = cordova.file.externalRootDirectory + "/TR/" + "91.jpg"; 
-		fileTransfer.onprogress = function(progressEvent) {
-			if (progressEvent.lengthComputable) {
-				var perc = Math.floor(progressEvent.loaded / progressEvent.total * 100);
-				$("#reproduccion_barra").width( Math.ceil(perc) + "%" );
-				//statusDom.innerHTML = perc + "% loaded...";
-			  	loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
-			} else {
-			  	loadingStatus.increment();
-			}
-		};
-		fileTransfer.download(
-			uri,
-			fileURL,
-			function(entry) {
-				alert("complete");
-				console.log("download complete: " + entry.toURL());
-			},
-			function(error) {
-				alert("upload error code" + error.code);
-				console.log("download error source " + error.source);
-				console.log("download error target " + error.target);
-				console.log("upload error code" + error.code);
-			},
-			false,
-			{
-				headers: {
-					"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
-				}
-			}
-		);		
-	}
 
+<script>	
+	cargar_punto();
+	var punto_activo = [];
+	function cargar_punto(){
+		var recorrido_id = window.localStorage.getItem("recorrido_activo_id");
+		var punto_id =  window.localStorage.getItem("punto_activo_id");
+		$.getJSON(urlSd + recorrido_id +"/"+"puntos.json", function( subdata ) {																								
+			$.each( subdata, function( subkey, subitem ) {   
+				if(subitem.id == punto_id){
+					//punto_activo["titulo"] = subitem.titulo;
+					punto_activo["multimedia"] = [];
+					$.each( subitem.multimedias, function( subkey, multitem ) {
+							if(subitem.tipo != 4){
+								var punto_id = multitem.entidad_id; 
+								var recorrido_id = multitem.layer_id; 	
+								var nombre_multimedia = multitem.codigo; 
+								punto_activo["multimedia"]["punto_id"] = punto_id;
+								punto_activo["multimedia"]["recorrido_id"] = recorrido_id;
+								punto_activo["multimedia"]["nombre_multimedia"] = nombre_multimedia;
+							}					
+					});
+					punto_activo["titulo"] = "";
+					punto_activo["subtitulo"] = "";					
+					$.each( subitem.campos, function( subkey, multitem ) {
+						if(multitem.nombre == "nombre"){
+							punto_activo["titulo"] = multitem.valor;
+						}
+						if(multitem.nombre == "subtitulo"){
+							punto_activo["subtitulo"] = multitem.valor;
+						}
+					});					
+				}
+			});
+			$("#punto_titulo").html(punto_activo.titulo);
+			$("#punto_sub_titulo").html(punto_activo.subtitulo);			
+		});									
+	}
+</script>
+
+<script>	
+	/* Script para la galeria */                 		 
 	function abrir_video(nombre){
 		window.location.href = "img/"+nombre;
 	}
 
-	var audio_src = "file:///android_asset/www/audios/demo.mp3";
-	
-	window.localStorage.setItem("ultima_web", "views/punto.html");
-	window.localStorage.setItem("ultima_web_menu", "true");
-	window.localStorage.setItem("ultima_web_pie", "true");
-	window.localStorage.setItem("ultima_web_cabecera", "Recorrido");
-	
+	var audio_src = "file:///android_asset/www/audios/demo.mp3";	
 	
 	$("#foot_contenido_extra").html($("#reproductor").html());
 	$("#reproductor").html("");
