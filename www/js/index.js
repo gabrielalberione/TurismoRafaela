@@ -15,7 +15,7 @@ var clave_encriptacion = "93bt0QWJ";
 var app = {
     // Application Constructor
     initialize: function() {
-        this.bindEvents();
+		this.bindEvents();
     },
     // Bind Event Listeners
     //
@@ -30,7 +30,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');		
+        app.receivedEvent('deviceready');
     },
 		
     // Update DOM on a Received Event
@@ -46,6 +46,12 @@ var app = {
     }		
 };
 
+// Handle the back button
+//
+function onBackKeyDown() {
+	//alert('Backbutton key pressed');
+	console.log('Backbutton key pressed');
+}
 
 function insertar_html(pUrl, div_id){
 	$("#"+div_id).load(pUrl);		

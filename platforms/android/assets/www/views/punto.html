@@ -16,44 +16,29 @@
   display: none;
 }
 </style>
+<div id="punto_slider">
+	<div id="jssor_1" style="position: relative; margin: 0 auto; top: 0px; left: 0px; width: 1300px; height: 750px; overflow: hidden;">
+        <!-- Loading Screen -->
+        <div data-u="loading" style="position: absolute; top: 0px; left: 0px;">
+            <div style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; top: 0px; left: 0px; width: 100%; height: 100%;"></div>
+            <div style="position:absolute;display:block;background:url('img/loading.gif') no-repeat center center;top:0px;left:0px;width:100%;height:100%;"></div>
+        </div>
+        <div id="ps_imagenes" data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 1300px; height: 670px; overflow: hidden;">
+        </div>
+
+        <span class="fa fa-chevron-right jssora22l" data-u="arrowright" style="padding-left: 45px; right: 15px; background-color:#6939a6;"></span>
+        <span class="fa fa-chevron-left jssora22r" data-u="arrowleft" style="right: 185px; background-color:#6939a6;"></span>
+    </div>
+</div>
 <div id="punto_info">
 	<span id="punto_titulo"></span><br><br>
 	<span id="punto_sub_titulo"></span><br>
-	<span id="punto_direccion">Bv. G. Lehmann 1003</span>        
+	<span id="punto_descripcion"></span>        
 </div>
 <div class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
-	<div class="col-xs-12">
-        <div class="col-xs-6 col-sm-4 col-md-3" style="padding: 5px;">
-            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-              <a href="img/1.jpg" itemprop="contentUrl" data-size="1733x1163">
-                  <div class="punto_foto_galeria" style="background-image: url('img/1.jpg');" itemprop="thumbnail" alt="Image description">
-                    <img src="img/iconos/camara.png" class="punto_icono_multimedia" />
-                    <img src="img/1.jpg" itemprop="thumbnail" alt="Image description" style="display:none;" />
-                  </div>
-              </a>
-            <figcaption itemprop="caption description">Image caption  1</figcaption>
-            </figure>                                      
-        </div>
-        
-        <div class="col-xs-6 col-sm-4 col-md-3" style="padding: 5px;">
-            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-              <a href="img/2.jpg" itemprop="contentUrl" data-size="1733x1163">
-                  <div class="punto_foto_galeria" style="background-image: url('img/2.jpg');" itemprop="thumbnail" alt="Image description">
-                    <img src="img/iconos/camara.png" class="punto_icono_multimedia" />
-                    <img src="img/2.jpg" itemprop="thumbnail" alt="Image description" style="display:none;" />
-                  </div>
-              </a>
-              <figcaption itemprop="caption description">Image caption 2</figcaption>
-            </figure>
-        </div>                        
-        <div class="col-xs-12 col-sm-8 col-md-6" style="padding: 5px;">
-              <a onClick="abrir_video('demo.mp4')">
-                  <div class="punto_foto_galeria" style="background-image: url('img/1.jpg');" alt="Image description">
-                    <img src="img/iconos/video.png" class="punto_icono_multimedia" />
-                    <img src="img/1.jpg"  alt="Image description" style="display:none;" />
-                  </div>
-              </a>
-	    </div>        
+	<div class="col-xs-12">    	
+    	<div id="imagenes_del_punto"></div>
+       	<div id="videos_del_punto"></div>
 	</div>            
 </div>
 
@@ -73,25 +58,36 @@
 </div>
 
 <script>	
+	var audio_src = "";
+	
+	$("#foot_contenido_extra").html($("#reproductor").html());
+	$("#reproductor").html("");
+	document.getElementById('barra_completa_sonido').onclick = adelantar_audio;
+		
 	cargar_punto();
 	var punto_activo = [];
+	var iterador = 0;
 	function cargar_punto(){
+		$("#foot_contenido_extra").hide();
 		var recorrido_id = window.localStorage.getItem("recorrido_activo_id");
 		var punto_id =  window.localStorage.getItem("punto_activo_id");
 		$.getJSON(urlSd + recorrido_id +"/"+"puntos.json", function( subdata ) {																								
 			$.each( subdata, function( subkey, subitem ) {   
 				if(subitem.id == punto_id){
 					//punto_activo["titulo"] = subitem.titulo;
-					punto_activo["multimedia"] = [];
-					$.each( subitem.multimedias, function( subkey, multitem ) {
-							if(subitem.tipo != 4){
-								var punto_id = multitem.entidad_id; 
-								var recorrido_id = multitem.layer_id; 	
-								var nombre_multimedia = multitem.codigo; 
-								punto_activo["multimedia"]["punto_id"] = punto_id;
-								punto_activo["multimedia"]["recorrido_id"] = recorrido_id;
-								punto_activo["multimedia"]["nombre_multimedia"] = nombre_multimedia;
-							}					
+					punto_activo["multimedias"] = [];
+					i_mul = 0;
+					$.each(subitem.multimedias, function( mulkey, multitem ) {
+						if(multitem.tipo != 4){
+							punto_activo["multimedias"][i_mul] = [];
+							punto_activo["multimedias"][i_mul]["url_online"] = multitem.url+"/"+multitem.codigo;							
+							punto_activo["multimedias"][i_mul]["url_local"] = urlSd+multitem.layer_id+"/"+multitem.entidad_id+"/"+multitem.codigo;							
+							punto_activo["multimedias"][i_mul]["punto_id"] = multitem.entidad_id;
+							punto_activo["multimedias"][i_mul]["recorrido_id"] = multitem.layer_id;
+							punto_activo["multimedias"][i_mul]["nombre_multimedia"] = multitem.codigo;
+							punto_activo["multimedias"][i_mul]["tipo"] = multitem.tipo;
+							i_mul++;
+						}					
 					});
 					punto_activo["titulo"] = "";
 					punto_activo["subtitulo"] = "";					
@@ -102,232 +98,160 @@
 						if(multitem.nombre == "subtitulo"){
 							punto_activo["subtitulo"] = multitem.valor;
 						}
+						if(multitem.nombre == "descripcion"){
+							punto_activo["descripcion"] = multitem.valor;
+						}						
 					});					
 				}
 			});
+			
+			/* Pintamos la info del punto */
 			$("#punto_titulo").html(punto_activo.titulo);
-			$("#punto_sub_titulo").html(punto_activo.subtitulo);			
+			$("#punto_sub_titulo").html(punto_activo.subtitulo);
+			$("#punto_descripcion").html(punto_activo.descripcion);						
+			
+			/* Pintamos la multimedia del punto */
+			var contenido_imagenes = "";
+			var contenido_imagenes_slider = "";
+			var contenido_videos = "";			
+			var url_multi = "img/1.jpg"; 
+			
+			$.each( punto_activo.multimedias, function( subkey, mult ) {				
+				if(mult.tipo == 0){ //imagenes
+					contenido_imagenes += '<div class="col-xs-6 col-sm-4 col-md-3" style="padding: 5px;">';
+					contenido_imagenes += '	  <a id="mult_a_'+iterador+'" href="#" class="fancybox">';
+					contenido_imagenes += "		  <div id='mult_div_"+iterador+"' class='punto_foto_galeria' alt='Image description'>";
+					contenido_imagenes += '			<img src="img/iconos/camara.png" class="punto_icono_multimedia" />';
+					contenido_imagenes += '		  </div>';
+					contenido_imagenes += '	  </a>';
+					contenido_imagenes += '</div>';		
+					
+					contenido_imagenes_slider +='<div style="display: none;">';
+					contenido_imagenes_slider +='<img id="slider_img_'+iterador+'" data-u="image" src="" />';
+					contenido_imagenes_slider +='</div>';
+				}
+
+				if(mult.tipo == 2){ // videos
+					contenido_videos += '<div class="col-xs-12 col-sm-8 col-md-6" style="padding: 5px;">';
+					contenido_videos += "	  <a id='multi_video_a_"+iterador+"'>";
+					contenido_videos += "		  <div class='punto_foto_galeria' style='background-image: url(\"img/1.jpg\");' alt='Image description'>";
+					contenido_videos += '			<img src="img/iconos/video.png" class="punto_icono_multimedia" />';
+					contenido_videos += '			<img src="img/1.jpg"  alt="Image description" style="display:none;" />';
+					contenido_videos += '		  </div>';
+					contenido_videos += '	  </a>';
+					contenido_videos += '</div>';        				
+				}	
+				
+
+				/* verificamos si existe en la sd, sino buscamos en internet*/
+				iterador++;			
+			});
+			$("#ps_imagenes").html(contenido_imagenes_slider);
+			$("#imagenes_del_punto").html(contenido_imagenes);			
+			$("#videos_del_punto").html(contenido_videos);
+			$(".fancybox").fancybox({
+				afterShow: function(current, previous) {
+					$('.fancybox-image').smartZoom({'containerClass':'zoomableContainer'});
+				}
+			});
+
+			iterador = 0;
+			verificar_existencia_archivo(punto_activo.multimedias[iterador].url_local, iterador);
 		});									
 	}
-</script>
-
-<script>	
-	/* Script para la galeria */                 		 
-	function abrir_video(nombre){
-		window.location.href = "img/"+nombre;
-	}
-
-	var audio_src = "file:///android_asset/www/audios/demo.mp3";	
 	
-	$("#foot_contenido_extra").html($("#reproductor").html());
-	$("#reproductor").html("");
-	document.getElementById('barra_completa_sonido').onclick = adelantar_audio;
-
-	var initPhotoSwipeFromDOM = function(gallerySelector) {
-
-    // parse slide data (url, title, size ...) from DOM elements 
-    // (children of gallerySelector)
-    var parseThumbnailElements = function(el) {
-        var thumbElements = el.childNodes,
-            numNodes = thumbElements.length,
-            items = [],
-            figureEl,
-            linkEl,
-            size,
-            item;
-
-        for(var i = 0; i < numNodes; i++) {
-
-            figureEl = thumbElements[i]; // <figure> element
-
-            // include only element nodes 
-            if(figureEl.nodeType !== 1) {
-                continue;
-            }
-
-            linkEl = figureEl.children[0]; // <a> element
-
-            size = linkEl.getAttribute('data-size').split('x');
-
-            // create slide object
-            item = {
-                src: linkEl.getAttribute('href'),
-                w: parseInt(size[0], 10),
-                h: parseInt(size[1], 10)
-            };
-
-
-
-            if(figureEl.children.length > 1) {
-                // <figcaption> content
-                item.title = figureEl.children[1].innerHTML; 
-            }
-
-            if(linkEl.children.length > 0) {
-                // <img> thumbnail element, retrieving thumbnail url
-                item.msrc = linkEl.children[0].getAttribute('src');
-            } 
-
-            item.el = figureEl; // save link to element for getThumbBoundsFn
-            items.push(item);
-        }
-
-        return items;
-    };
-
-    // find nearest parent element
-    var closest = function closest(el, fn) {
-        return el && ( fn(el) ? el : closest(el.parentNode, fn) );
-    };
-
-    // triggers when user clicks on thumbnail
-    var onThumbnailsClick = function(e) {
-        e = e || window.event;
-        e.preventDefault ? e.preventDefault() : e.returnValue = false;
-
-        var eTarget = e.target || e.srcElement;
-
-        // find root element of slide
-        var clickedListItem = closest(eTarget, function(el) {
-            return (el.tagName && el.tagName.toUpperCase() === 'FIGURE');
-        });
-
-        if(!clickedListItem) {
-            return;
-        }
-
-        // find index of clicked item by looping through all child nodes
-        // alternatively, you may define index via data- attribute
-        var clickedGallery = clickedListItem.parentNode,
-            childNodes = clickedListItem.parentNode.childNodes,
-            numChildNodes = childNodes.length,
-            nodeIndex = 0,
-            index;
-
-        for (var i = 0; i < numChildNodes; i++) {
-            if(childNodes[i].nodeType !== 1) { 
-                continue; 
-            }
-
-            if(childNodes[i] === clickedListItem) {
-                index = nodeIndex;
-                break;
-            }
-            nodeIndex++;
-        }
-
-
-
-        if(index >= 0) {
-            // open PhotoSwipe if valid index found
-            openPhotoSwipe( index, clickedGallery );
-        }
-        return false;
-    };
-
-    // parse picture index and gallery index from URL (#&pid=1&gid=2)
-    var photoswipeParseHash = function() {
-        var hash = window.location.hash.substring(1),
-        params = {};
-
-        if(hash.length < 5) {
-            return params;
-        }
-
-        var vars = hash.split('&');
-        for (var i = 0; i < vars.length; i++) {
-            if(!vars[i]) {
-                continue;
-            }
-            var pair = vars[i].split('=');  
-            if(pair.length < 2) {
-                continue;
-            }           
-            params[pair[0]] = pair[1];
-        }
-
-        if(params.gid) {
-            params.gid = parseInt(params.gid, 10);
-        }
-
-        return params;
-    };
-
-    var openPhotoSwipe = function(index, galleryElement, disableAnimation, fromURL) {
-        var pswpElement = document.querySelectorAll('.pswp')[0],
-            gallery,
-            options,
-            items;
-
-        items = parseThumbnailElements(galleryElement);
-
-        // define options (if needed)
-
-        options = {
-
-            // define gallery index (for URL)
-            galleryUID: galleryElement.getAttribute('data-pswp-uid'),
-
-            getThumbBoundsFn: function(index) {
-                // See Options -> getThumbBoundsFn section of documentation for more info
-                var thumbnail = items[index].el.getElementsByTagName('img')[0], // find thumbnail
-                    pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
-                    rect = thumbnail.getBoundingClientRect(); 
-
-                return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
-            }
-
-        };
-
-        // PhotoSwipe opened from URL
-        if(fromURL) {
-            if(options.galleryPIDs) {
-                // parse real index when custom PIDs are used 
-                // http://photoswipe.com/documentation/faq.html#custom-pid-in-url
-                for(var j = 0; j < items.length; j++) {
-                    if(items[j].pid == index) {
-                        options.index = j;
-                        break;
-                    }
-                }
-            } else {
-                // in URL indexes start from 1
-                options.index = parseInt(index, 10) - 1;
-            }
-        } else {
-            options.index = parseInt(index, 10);
-        }
-
-        // exit if index not found
-        if( isNaN(options.index) ) {
-            return;
-        }
-
-        if(disableAnimation) {
-            options.showAnimationDuration = 0;
-        }
-
-        // Pass data to PhotoSwipe and initialize it
-        gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
-        gallery.init();
-    };
-
-    // loop through all gallery elements and bind events
-    var galleryElements = document.querySelectorAll( gallerySelector );
-
-    for(var i = 0, l = galleryElements.length; i < l; i++) {
-        galleryElements[i].setAttribute('data-pswp-uid', i+1);
-        galleryElements[i].onclick = onThumbnailsClick;
-    }
-
-    // Parse URL and open gallery if it contains #&pid=3&gid=1
-    var hashData = photoswipeParseHash();
-    if(hashData.pid && hashData.gid) {
-        openPhotoSwipe( hashData.pid ,  galleryElements[ hashData.gid - 1 ], true, true );
-    }
-};
-
-// execute above function
-initPhotoSwipeFromDOM('.my-gallery');
+	/* Recorremos uno detras de otro, por que son tareas asincronas, sino hace lio */
+	function verificar_existencia_archivo(url, iterador){
+		window.resolveLocalFileSystemURL(url, vea_existe_archivo, vea_no_existe_archivo); 
+	}
+	
+	function vea_existe_archivo(fileEntry){ 				
+		var url = punto_activo.multimedias[iterador].url_local;
+		console.log("existe en la sd:"+iterador+" - "+url);
+		if(punto_activo.multimedias[iterador].tipo == 0){
+			$("#mult_a_"+iterador).attr("href",url);
+			$("#slider_img_"+iterador).attr("src",url);			
+			$('#mult_div_'+iterador).css("background-image", "url("+url+")");
+			//ScaleSlider();		 
+		}
+		if(punto_activo.multimedias[iterador].tipo == 1){ 
+			audio_src = String(url);
+			$("#foot_contenido_extra").show();
+		}
+		if(punto_activo.multimedias[iterador].tipo == 2){
+			$("#multi_video_a_"+iterador).attr("onclick","abrir_video('"+url+"')");
+		}
+		if(iterador < (punto_activo.multimedias.length-1)){
+			iterador++;	
+			verificar_existencia_archivo(punto_activo.multimedias[iterador].url_local, iterador);	
+		}else{
+			activar_slider();
+		}
+	}
+	
+	function vea_no_existe_archivo(){
+		var url = punto_activo.multimedias[iterador].url_local;
+		console.log("no existe en la sd:"+iterador+" - "+url);
+		url = punto_activo.multimedias[iterador].url_online;
+		if(punto_activo.multimedias[iterador].tipo == 0){
+			$("#mult_a_"+iterador).attr("href",url);
+			$("#slider_img_"+iterador).attr("src",url);	
+			$('#mult_div_'+iterador).css("background-image", "url('"+url+"')"); 
+			//ScaleSlider();			
+		}
+		if(punto_activo.multimedias[iterador].tipo == 1){ 
+			audio_src = String(url);
+			$("#foot_contenido_extra").show();			
+		}		
+		if(punto_activo.multimedias[iterador].tipo == 2){
+			$("#multi_video_a_"+iterador).attr("onclick","abrir_video('"+url+"')");
+		}
+		if(iterador < (punto_activo.multimedias.length-1)){
+			iterador++;		
+			verificar_existencia_archivo(punto_activo.multimedias[iterador].url_local, iterador);	
+		}
+	}
+	
 </script>
+
+<script>	                		 
+	function abrir_video(nombre){
+		var ref = window.open(nombre, '_blank', 'location=no');
+	}				
+</script>
+
+<script>
+	function activar_slider() {
+		
+		var jssor_1_options = {
+		  $AutoPlay: true,
+		  $SlideDuration: 800,
+		  $FillMode:2,
+		  $SlideEasing: $Jease$.$OutQuint,
+		  $ArrowNavigatorOptions: {
+			$Class: $JssorArrowNavigator$
+		  }
+		};
+		
+		var jssor_1_slider = new $JssorSlider$("jssor_1", jssor_1_options);
+		
+		//responsive code begin
+		//you can remove responsive code if you don't want the slider scales while window resizes
+		function ScaleSlider() {
+			var refSize = jssor_1_slider.$Elmt.parentNode.clientWidth;
+			if (refSize) {
+				refSize = Math.min(refSize, 1920);
+				jssor_1_slider.$ScaleWidth(refSize);
+			}
+			else {
+				window.setTimeout(ScaleSlider, 30);
+			}
+		}
+		ScaleSlider();
+		$(window).bind("load", ScaleSlider);
+		$(window).bind("resize", ScaleSlider);
+		$(window).bind("orientationchange", ScaleSlider);
+		//responsive code end
+	};
+</script>     
 

@@ -58,6 +58,11 @@
 	var permitir_descargar_audios = false;
 	var permitir_descargar_imagenes = false;
 	var permitir_descargar_videos = false;	
+	/* Seteo para que cuando termine de sincronizar vaya a recorridos */
+	window.localStorage.setItem("ultima_web", "views/recorridos.html");
+	window.localStorage.setItem("ultima_web_menu", true);
+	window.localStorage.setItem("ultima_web_pie", true);
+	window.localStorage.setItem("ultima_web_cabecera", "Recorridos");		
 		
 	function sincronizar(){		
 		$("#sincronizacion_configuracion").hide();

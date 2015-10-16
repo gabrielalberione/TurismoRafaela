@@ -21,7 +21,15 @@
                             "count": 1
                         },
                         {
+                            "xml": "<feature name=\"Media\"><param name=\"android-package\" value=\"org.apache.cordova.media.AudioHandler\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -32,7 +40,19 @@
                     "/*": [
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 2
+                            "count": 3
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.RECORD_AUDIO\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />",
+                            "count": 1
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
@@ -45,16 +65,22 @@
     },
     "installed_plugins": {
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.alberione.turismorafela"
+            "PACKAGE_NAME": "com.alberione.guiar"
         },
         "org.apache.cordova.file": {
-            "PACKAGE_NAME": "com.alberione.turismorafela"
+            "PACKAGE_NAME": "com.alberione.guiar"
         },
         "org.apache.cordova.file-transfer": {
-            "PACKAGE_NAME": "com.alberione.turismorafela"
+            "PACKAGE_NAME": "com.alberione.guiar"
+        },
+        "org.apache.cordova.media": {
+            "PACKAGE_NAME": "com.alberione.guiar"
         },
         "org.apache.cordova.network-information": {
-            "PACKAGE_NAME": "com.alberione.turismorafela"
+            "PACKAGE_NAME": "com.alberione.guiar"
+        },
+        "org.apache.cordova.inappbrowser": {
+            "PACKAGE_NAME": "com.alberione.guiar"
         }
     },
     "dependent_plugins": {}

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.alberione.turismorafela" version="0.0.1" xmlns:gap="http://phonegap.com/ns/1.0" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Rafaela Turismo</name>
+<widget id="com.alberione.guiar" version="0.0.1" xmlns:gap="http://phonegap.com/ns/1.0" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Guia.R</name>
     <description>
         
     </description>
@@ -34,7 +34,6 @@
 	<feature name="Geolocation">
 		<param name="ios-package" value="CDVLocation" />
 	</feature>	
-
 	
 	<preference name="AndroidPersistentFileLocation" value="Internal" />
 

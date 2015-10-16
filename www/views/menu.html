@@ -1,21 +1,41 @@
 <div class="snap-drawers">
      <div class="snap-drawer snap-drawer-left">  
         <img src="img/top_muni.png" class="img-responsive" />  
-        <div class="col-xs-12 menu_item">
-           <i class="fa fa-child"></i>Recorridos
-        </div>
-        <div class="col-xs-12 menu_item">
-           <a href="javascript:leer_qr();"><i class="fa fa-qrcode"></i>Lector QR</a>
-        </div>				
-        <div class="col-xs-12 menu_item">
-           <i class="fa fa-cog"></i>Configuracion
-        </div>
-        <div class="col-xs-12 menu_item">
-           <i class="fa fa-question-circle"></i>Modo de uso
-        </div>
-        <div class="col-xs-12 menu_item">
-           <i class="fa fa-info-circle"></i>Sobre la aplicación
-        </div>				
+        <a href="javascript:cambiar_contenido('views/recorridos.html', 'Recorridos', true, true); abrir_menu();">
+            <div class="col-xs-12 menu_item">
+               <img src="img/iconos/recorridos.png" /><div class="menu_accion">Recorridos</div>
+            </div>
+        </a>	
+        <a href="javascript:leer_qr(); abrir_menu();">
+            <div class="col-xs-12 menu_item">
+               <img src="img/iconos/qr.png" /><div class="menu_accion">Lector QR</div>
+            </div>
+        </a>  
+        <a href="javascript:leer_qr(); abrir_menu();">
+            <div class="col-xs-12 menu_item">
+               <img src="img/iconos/pois.png" /><div class="menu_accion">Puntos de interés</div>
+            </div>
+        </a> 
+        <a href="javascript:leer_qr(); abrir_menu();">
+            <div class="col-xs-12 menu_item">
+               <img src="img/iconos/agenda.png" /><div class="menu_accion">Agenda</div>
+            </div>
+        </a>                        		
+        <a href="javascript:leer_qr(); abrir_menu();">
+            <div class="col-xs-12 menu_item">
+               <img src="img/iconos/configuracion.png" /><div class="menu_accion">Configuración</div>
+            </div>
+        </a>  
+        <a href="javascript:leer_qr(); abrir_menu();">
+            <div class="col-xs-12 menu_item">
+               <img src="img/iconos/ayuda.png" /><div class="menu_accion">Modo de uso</div>
+            </div>
+        </a> 
+        <a href="javascript:leer_qr(); abrir_menu();">
+            <div class="col-xs-12 menu_item">
+               <img src="img/iconos/info.png" /><div class="menu_accion">Sobre la aplicación</div>
+            </div>
+        </a>                 			
     </div> 
 </div>  
 <script>

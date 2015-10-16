@@ -4,18 +4,14 @@
     <meta charset="utf-8"/>
     <meta name="format-detection" content="telephone=no"/>
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
-    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+	 <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
     
-    <title>Turismo Rafaela</title>
+    <title>Guia.R</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	<link href="css/font-awesome.css" rel="stylesheet" type="text/css">    
     
     <!-- MENU -->
     <link href="css/snap.css" rel="stylesheet">
-    
-    <!-- GALERIA -->
-    <link href="css/photoswipe.css" rel="stylesheet">
-    <link href="css/skin_photoswipe.css" rel="stylesheet">
         
     <link href="css/index.css" rel="stylesheet" type="text/css">
 	<link href="css/reproductor_audio.css" rel="stylesheet" type="text/css">
@@ -25,7 +21,10 @@
     <link href="css/animacion_descarga.css" rel="stylesheet" type="text/css">    
     
     <!-- TOGGLES -->
-    <link href="css/toggles.css" rel="stylesheet" type="text/css">    
+    <link href="css/toggles.css" rel="stylesheet" type="text/css"> 
+    
+    <link href="css/lightbox/jquery.fancybox.css" rel="stylesheet" type="text/css">      
+    
 </head>
 <body>
 	<style>
@@ -38,6 +37,7 @@
 		}
 		.snap-drawer{
 			background-color:#FFF;
+			box-shadow: 5px 0px 20px #888888;			
 		}
 	</style>
 	<!-- Splash loading... -->
@@ -122,23 +122,29 @@
     <script type="text/javascript" src="js/index.js"></script>	
     <script type="text/javascript" src="js/utiles.js"></script>	    
     <script type="text/javascript" src="js/libs/jquery.js"></script>	
-    <script type="text/javascript" src="js/libs/jquery.touchSwipe.min.js"></script> 		
     <script type="text/javascript" src="js/libs/bootstrap.min.js"></script>	
     <script type="text/javascript" src="js/libs/reproductor_audio.js"></script> 
     <script type="text/javascript" src="js/libs/snap.js"></script> 
-    
- 	<!-- GALERIA -->
-    <script type="text/javascript" src="js/libs/photoswipe.min.js"></script> 
-    <script type="text/javascript" src="js/libs/photoswipe-ui-default.min.js"></script> 
+    <script type="text/javascript" src="js/libs/jquery.fancybox.js"></script>
+    <script type="text/javascript" src="js/libs/zoom.js"></script>   <!-- e-smart-zoom-jquery.min --> 
+    <script type="text/javascript" src="js/libs/jssor.slider-20.mini.js"></script> 
     
     <script>
+		app.initialize();
+		
 		//alert(encrypt("1363","93bt0QWJ"));
 		var urlSd = "";
-		var archivoActivo = "";	
-		app.initialize();
+		var archivoActivo = "";			
 		var datos_a_sincronizar = true;
-		$(document).ready(function() {							
-			urlSd = cordova.file.externalDataDirectory + "GuiaR/";
+		$(document).ready(function() {	
+			var lugarAlmacenamiento = cordova.file.externalDataDirectory;
+			console.log("test:"+lugarAlmacenamiento);			
+			if(lugarAlmacenamiento == null){
+				lugarAlmacenamiento = cordova.file.dataDirectory;
+			}
+
+			urlSd = lugarAlmacenamiento + "GuiaR/";
+			document.addEventListener("backbutton", onBackKeyDown, false);
 			insertar_html("views/pie.html", "pie");								
 			insertar_html("views/menu.html", "menu");
 			insertar_html("views/cabecera.html", "cabecera");
@@ -165,10 +171,11 @@
 		}
 		
 		//
-		function existeArchivo() {			
-			$.getJSON(urlHost+urlCheckearActualizaciones+"fecha:2018-09-27", function( data ) {			
+		function existeArchivo(url) {					
+			$.getJSON(urlHost+urlCheckearActualizaciones+"fecha:2022-09-27", function( data ) {			
 				var items = [];
 				$.each( data, function( key, item ) {					
+					console.log(item.resultado);	
 					if(item.resultado==false){
 						iniciarApp();
 					}else{
@@ -180,6 +187,7 @@
 		}
 		
 		function descargarArchivo(){
+			console.log("no existe");			
 			cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);	
 		}				
 	</script>

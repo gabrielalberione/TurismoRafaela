@@ -154,9 +154,19 @@ a{
 }
 
 .menu_item{
-	margin-top: 20px;
+	margin-top: 10px;
 	color: #8e8e8e;
-	font-size: 18px;
+	font-size: 15px;
+}
+
+.menu_item img{
+	height: 35px;
+	float: left;
+	margin-right: 25px;
+}
+
+.menu_accion{
+	margin: 5px;
 }
 
 .menu_item i{
@@ -324,4 +334,55 @@ input[type=checkbox] {
 	border-radius: 20px;	
 	text-align: center;
 	color: #fff;
+}
+
+
+/* SLIDER */
+
+/* jssor slider bullet navigator skin 05 css */
+/*
+.jssorb05 div           (normal)
+.jssorb05 div:hover     (normal mouseover)
+.jssorb05 .av           (active)
+.jssorb05 .av:hover     (active mouseover)
+.jssorb05 .dn           (mousedown)
+*/
+.jssorb05 {
+	position: absolute;
+}
+.jssorb05 div, .jssorb05 div:hover, .jssorb05 .av {
+	position: absolute;
+	/* size of bullet elment */
+	width: 16px;
+	height: 16px;
+	background: url('../img/b05.png') no-repeat;
+	overflow: hidden;
+	cursor: pointer;
+}
+.jssorb05 div { background-position: -7px -7px; }
+.jssorb05 div:hover, .jssorb05 .av:hover { background-position: -37px -7px; }
+.jssorb05 .av { background-position: -67px -7px; }
+.jssorb05 .dn, .jssorb05 .dn:hover { background-position: -97px -7px; }
+
+/* jssor slider arrow navigator skin 22 css */
+/*
+.jssora22l                  (normal)
+.jssora22r                  (normal)
+.jssora22l:hover            (normal mouseover)
+.jssora22r:hover            (normal mouseover)
+.jssora22l.jssora22ldn      (mousedown)
+.jssora22r.jssora22rdn      (mousedown)
+*/
+.jssora22l, .jssora22r {
+	padding: 36px;
+	border-radius: 70px;
+	font-size: 50px;
+	color: #FFF;
+	width: 120px;
+	height: 120px;
+	cursor: pointer;
+	color: #fff;
+	margin: 20px;
+	bottom: 0px;
+	position: absolute;
 }
