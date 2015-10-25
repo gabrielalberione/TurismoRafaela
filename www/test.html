@@ -42,12 +42,7 @@
 			box-shadow: 5px 0px 20px #888888;
 		}
 	</style>
-	<!-- Splash loading... -->
- 	<div class="spinner" style="display: none;" id="splashLoading">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
-    </div>
-    
+
     <div id="menu"><div class="snap-drawers">
      <div class="snap-drawer snap-drawer-left">  
         <img src="img/top_muni.png" class="img-responsive" />  
@@ -126,65 +121,14 @@
 </script></div>
 	    <div id="contenido"  class="snap-content">
         	<div class="subtop_contenido">
-                Guías
+                Agenda
             </div>
             <div class='col-xs-12'>
-                <p class="color_letra_gris_claro" style="text-align: justify; font-size: 15px; margin: 15px;">Seleccione un recorrido y disfute de una experiencia interactiva en la ciudad de Rafaela.</p>
-            </div>   
-            <div id="recorridos_listado">
-            	<div class='col-xs-12 row' style="padding: 0px;">
-                	<div class='col-xs-3' onClick="toogle_div('recorrido_puntos')">
-						<img  style="width: 50%; height: 50%" class='recorrido_icono' src='http://200.58.108.122/gis/files/icons_layers/recorridocircuitochico.png' />
-                    </div>
-                	<div class='col-xs-9' onClick="toogle_div('recorrido_puntos')" style="padding: 0px;">
-                        <div class='recorrido borde_bottom_gris color_letra_gris_claro'><span class='recorrido_titulo'>Circuito Chico</span><br>
-                        <span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>
-                    </div>
-                    <div id="recorrido_puntos" style="display:block;">
-                        <div class='col-xs-3' style="padding: 0px;">
-                        </div>                    
-                        <div class='col-xs-9 borde_bottom_gris' style="padding: 0px;">
-                            <div class='col-xs-9 recorrido_punto color_letra_gris_claro'><span class='recorrido_titulo'>Circuito Chico ssadsadas sadad sad sadsadas</span><br>
-                            <span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>
-                            <div class='col-xs-3' style="padding: 0px;"><img class='recorrido_img_punto' src='img/flecha_derecha.png' /></div>
-                        </div>                        
-                        <div class='col-xs-3' style="padding: 0px;">
-                        </div>                    
-                        <div class='col-xs-9 borde_bottom_gris' style="padding: 0px;">
-                        	<table style="width: 100%; margin: 10px 0px;">
-                            	<tr>
-                                	<td style="width:80%;">
-                                    	<span class='recorrido_titulo'>Circuito Chico ssadsadas sadad sad sadsadas</span><br>
-	                                    <span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span>
-                                    </td>
-                                    <td rowspan="2" style="vertical-align: middle;">
-                                    	<img style='height: 50px;' src='img/flecha_derecha.png' />
-                                    </td>
-                                <tr>
-                            </table>
-                        </div>                        
-                    </div>
-				</div>					
-            	<div class='col-xs-12 row' style="padding: 0px;">
-                	<div class='col-xs-3'>
-						<img class='recorrido_icono' src='http://200.58.108.122/gis/files/icons_layers/recorridocircuitochico.png' />
-                    </div>
-                	<div class='col-xs-9' style="padding: 0px;">
-                        <div class='recorrido borde_bottom_gris color_letra_gris_claro'><span class='recorrido_titulo'>Circuito Chico</span><br>
-                        <span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>
-                    </div>
-				</div>	
-            	<div class='col-xs-12 row' style="padding: 0px;">
-                	<div class='col-xs-3 '>
-						<img class='recorrido_icono' src='http://200.58.108.122/gis/files/icons_layers/recorridocircuitochico.png' />
-                    </div>
-                	<div class='col-xs-9' style="padding: 0px;">
-                        <div class='recorrido borde_bottom_gris color_letra_gris_claro'><span class='recorrido_titulo'>Circuito Chico</span><br>
-                        <span class='recorrido_subtitulo color_letra_gris_claro'>Lugares de Interes</span></div>
-                    </div>
-				</div>	                				
-            </div>
-        </div>        
+                <p class="color_letra_gris_claro" style="text-align: justify; font-size: 15px; margin: 15px;">Seleccione una agenda y conozca los eventos y espectaculos organizados.</p>
+            </div> 
+            <div class='col-xs-12'>
+	            <div class="row"> </div>
+         	</div>
     </div>    
     <div id="pie"></div>
     
@@ -267,7 +211,7 @@
     <script type="text/javascript" src="js/libs/photoswipe-ui-default.min.js"></script> 
     
     
-        <script>
+    <script>
 		app.initialize();
 		
 		//alert(encrypt("1363","93bt0QWJ"));
@@ -277,8 +221,7 @@
 		$(document).ready(function() {	
 			insertar_html("views/pie.html", "pie");								
 			insertar_html("views/menu.html", "menu");
-			insertar_html("views/cabecera.html", "cabecera");
-				
-		});				
+			insertar_html("views/cabecera.html", "cabecera");	 			
+		});					
 	</script>
 </body>

@@ -1,0 +1,74 @@
+<div class="subtop_contenido">
+	<div>Agenda</div>   
+    <a href="javascript:av_descargar_agenda()"><div style="float:right; font-size: 10px; color:rgba(156,156,156,1.00); margin-top: -8px;"><span id="av_ult_act">Ult. act.: - </span> <i class="fa fa-refresh" style="font-size: 14px; margin-left: 10px; color:rgba(156,156,156,1.00)"></i></div></a>
+</div>
+<div class='col-xs-12'>
+	<p class="color_letra_gris_claro" style="text-align: justify; font-size: 15px; margin: 15px;">Seleccione una agenda y conozca los eventos y espectaculos organizados.</p>
+</div>   
+<div id="agenda_listado" class='col-xs-12'>No hay eventos cargados. Volvé pronto!</div>
+<script>
+	inciar_agenda();
+	var agendas = [];
+	var i = 0;
+		
+	function inciar_agenda(){
+		$("#av_ult_act").html("Ult. act.: "+convertir_to_spa(window.localStorage.getItem("act_agenda")));
+		ac_get_top(cargar_agenda);		
+	}
+	
+	function cargar_agenda(tx, rs){
+		var len = rs.rows.length;
+		var contenido_html = "";
+		var fecha_ant = "";
+		var ban_primero = true;
+		for (var i=0; i<len; i++){
+			var fecha = rs.rows.item(i).fecha_inicio;						
+			if(fecha_ant != fecha){
+				fecha_ant = fecha;
+				if(ban_primero == false){
+					contenido_html += "</div></div></div>";							
+				}
+				contenido_html += "<div class='agenda_fila'>";		
+				contenido_html += "<div class='row-height'>";
+				contenido_html += "<div class='col-xs-2 col-height col-top' style='padding: 0px;'>";	
+				contenido_html += "<div class='agenda_dia_escrito'>"+get_dia_semana(fecha)+"</div>";
+				contenido_html += "</div>";		
+				contenido_html += "<div class='col-xs-3 col-height col-top' style='border-bottom: 1px solid #e5e5e5; padding-bottom: 10px;'>";		
+				contenido_html += "<div class='agenda_dia_nro'><p>"+get_dia(fecha)+"</p></div>";		
+				contenido_html += "</div>";		
+				contenido_html += " <div class='col-xs-7 col-height' style='padding: 0px; text-align:justify; border-bottom: 1px solid #e5e5e5; padding-bottom: 10px;'>";
+				ban_primero = false;			
+			}
+			contenido_html += "<p>"+rs.rows.item(i).horario+" H / "+rs.rows.item(i).titulo+"</p>";	
+		}
+		$("#agenda_listado").html(contenido_html);	
+	}
+	
+	function av_descargar_agenda(){
+		/* activamos el splash de loading */
+		activar_loading();	
+		/* Descargamos la agenda y lo guardamos en la sd */
+		var fileTransfer = new FileTransfer();
+		var pFecha = get_hoy_ing();
+		//if (localStorage.getItem("act_agenda") === null) {
+			pFecha = "1900-01-01";
+		//}			
+		fileTransfer.download(urlHost+agenda_parametros.url_get_agenda+pFecha, urlSd + agenda_parametros.nombre_json, 
+		function(entry) {	
+			console.log("ok");
+			ac_copiar_json_a_bd(av_succes_act);
+		}, 
+		function(err) {
+			console.log("Error");
+		});				
+	}	
+	
+	function av_succes_act(){
+		desactivar_loading();
+		var splashLoading = document.getElementById('splashLoading');
+		splashLoading.style.display = 'none';
+		window.localStorage.setItem("act_agenda", get_hoy_ing());			
+		cambiar_contenido('views/agenda.html', 'Agenda', true, true, false, agenda_parametros.color_cabecera_fondo, agenda_parametros.color_cabecera_borde); 
+	}
+			
+</script>

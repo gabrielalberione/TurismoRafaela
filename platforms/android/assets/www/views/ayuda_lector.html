@@ -1,0 +1,58 @@
+
+<html>
+    <div>
+        <div class="col-md-12" style="margin: 10px; margin-top: 35px;">
+            <p class="color_letra_gris_claro" style="text-align: justify;">
+            	Siga los pasos detallados a continuación para usar correctamente la misma.
+            </p>
+        </div>    
+        <div class="col-md-12" style="margin: 15px;">
+            <img src="img/ayuda_qr.png" class="img-responsive" />
+        </div>    
+        <div class="col-md-12" style="margin: 5px;">
+            <p class="color_letra_gris_claro" style="text-align: justify;">
+            	1. Seleccione un recorrido. <br>
+                2. Elija una parada. <br>
+                3. Apunte con su teléfono hacia el código QR  ubicado en el cartel de forma que las cuatro esquinas del mismo aparezcan en la pantalla, toque la misma para enfocar y espere un instante.
+                4. Espere a que la aplicación identifique automáticamente el código.
+                5. Acceda al material multimedia que ofrece la aplicación.
+            </p>
+        </div>   
+        <div class="col-md-12" style="margin: 5px;"> 
+            <div class="color_letra_gris_claro" style="margin-top: 30px;"> 
+                <div style="float:left; margin-top: 8px;">
+                    <b>No volver a mostrar este mensaje</b>
+                </div>
+                <div class="switch" style="float:left; margin: 0px 13px;">
+                    <input id="cmn-toggle-1" onClick="no_volver_a_mostrar()" class="cmn-toggle cmn-toggle-round" type="checkbox">
+                    <label for="cmn-toggle-1"></label>
+                </div>           
+			</div>
+        </div>
+        <div  class="col-md-12" style="float:right; margin-top: 15px; margin-bottom: 60px; margin-right: 5px;">
+           <button type="button" id="boton_siguiente" class="btn btn-primary" onclick="avanza()" 
+                    style="border-radius: 40px; height: 40px; width: 40px; margin-left: 15px;">
+                <span class="fa fa-chevron-right" style="padding-left: 2px;padding-top: 4px;"></span>
+            </button>
+        </div>                
+    </div> 
+    <script>
+		var no_mostrar_mas = false;
+		$(document).ready(function() {	
+			$('#boton_siguiente').css('background-color', qr_parametros.color_cabecera_fondo);
+			$('#boton_siguiente').css('border-color', qr_parametros.color_cabecera_fondo);		
+		});
+		function avanza(){
+			window.localStorage.setItem("saltear_ayuda_qr", no_mostrar_mas);
+			leer_qr();
+		}
+		
+		function no_volver_a_mostrar(){
+			if(no_mostrar_mas){
+				no_mostrar_mas = false;
+			}else{
+				no_mostrar_mas = true;
+			}
+		}
+	</script>
+</html>

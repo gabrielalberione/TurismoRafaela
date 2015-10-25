@@ -1,3 +1,76 @@
+function activar_loading(){
+	var splashLoading = document.getElementById('splashLoading');
+	splashLoading.style.display = 'block';
+	 var color = $(this).attr("data-color");
+	 $(".spinner").css("background-color",cabecera_actual);	
+	 $('.spinner').css('opacity', '0.8');	
+}
+
+function desactivar_loading(){
+	var splashLoading = document.getElementById('splashLoading');
+	splashLoading.style.display = 'none';	
+}
+
+function get_hoy_ing(){
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1;//January is 0, so always add + 1
+	
+	var yyyy = today.getFullYear();
+	if(dd<10){dd='0'+dd}
+	if(mm<10){mm='0'+mm}
+	today = yyyy+'-'+mm+'-'+dd;
+	return today;	
+}
+
+function fecha_convertir_to_time(pDate){
+	var myDate = pDate;
+	myDate=myDate.split("-");					
+	var ret = new Date(parseInt(myDate[0], 10), parseInt(myDate[1], 10) - 1 , parseInt(myDate[2]), 10).getTime();
+	return ret;
+}
+
+function convertir_to_spa(pDate){
+	var d = new Date(pDate);
+	var dd = d.getDate();
+	var mm = d.getMonth()+1;//January is 0, so always add + 1
+	
+	var yyyy = d.getFullYear();
+	if(dd<10){dd='0'+dd}
+	if(mm<10){mm='0'+mm}
+	ret = dd+'/'+mm+'/'+yyyy;
+	return ret;		
+}
+
+function get_dia(pDate){
+	var d = new Date(pDate);
+	return d.getDate();
+}
+
+function get_dia_semana(pDate){
+	var d = new Date(pDate);
+	var n = d.getDay();
+	var ret = "";
+	if(n==0){
+		ret = "DOM";
+	}else if(n==1){
+		ret = "LUN";
+	}else if(n==2){
+		ret = "MAR";
+	}else if(n==3){
+		ret = "MIE";
+	}else if(n==4){
+		ret = "JUE";
+	}else if(n==5){
+		ret = "VIE";
+	}else if(n==6){
+		ret = "SAB";
+	}
+	
+	return ret;
+}
+
+
 function toogle_div(id_div){
 	$("#"+id_div).toggle();
 }

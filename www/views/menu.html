@@ -1,22 +1,22 @@
 <div class="snap-drawers">
      <div class="snap-drawer snap-drawer-left">  
         <img src="img/top_muni.png" class="img-responsive" />  
-        <a href="javascript:cambiar_contenido('views/recorridos.html', 'Recorridos', true, true); abrir_menu();">
+        <a href="javascript:abrir_recorrido();">
             <div class="col-xs-12 menu_item">
                <img src="img/iconos/recorridos.png" /><div class="menu_accion">Recorridos</div>
             </div>
         </a>	
-        <a href="javascript:leer_qr(); abrir_menu();">
+        <a href="javascript:abrir_qr();">
             <div class="col-xs-12 menu_item">
                <img src="img/iconos/qr.png" /><div class="menu_accion">Lector QR</div>
             </div>
         </a>  
-        <a href="javascript:leer_qr(); abrir_menu();">
+        <a href="javascript:abrir_pois();">
             <div class="col-xs-12 menu_item">
                <img src="img/iconos/pois.png" /><div class="menu_accion">Puntos de interés</div>
             </div>
         </a> 
-        <a href="javascript:leer_qr(); abrir_menu();">
+        <a href="javascript:abrir_agenda();">
             <div class="col-xs-12 menu_item">
                <img src="img/iconos/agenda.png" /><div class="menu_accion">Agenda</div>
             </div>
@@ -55,22 +55,46 @@
 		} 
 	}
 	
-	function leer_qr(){
-		var splashLoading = document.getElementById('splashLoading');
-		splashLoading.style.display = 'block';		
+	function abrir_recorrido(){
+		window.localStorage.setItem("group_activo_id", recorrido_parametros.grouplayer_id);
+		cambiar_contenido('views/layers.html', 'Recorridos', true, true, true, recorrido_parametros.color_cabecera_fondo, recorrido_parametros.color_cabecera_borde); 
+		abrir_menu();
+	}
+	
+	function abrir_pois(){
+		window.localStorage.setItem("group_activo_id", pois_parametros.grouplayer_id);
+		cambiar_contenido('views/layers.html', 'Puntos de Interes', true, true, true, pois_parametros.color_cabecera_fondo, pois_parametros.color_cabecera_borde); 
+		abrir_menu();
+	}	
+	
+	function abrir_qr(){
+		javascript:cambiar_contenido('views/ayuda_lector.html', 'Lector QR', true, true, true, qr_parametros.color_cabecera_fondo, qr_parametros.color_cabecera_borde); 
+		abrir_menu();
+	}
+	
+	function leer_qr(){		
 		cordova.plugins.barcodeScanner.scan(
 		  function (result) {
 			  alert("We got a barcode\n" +
 					"Result: " + result.text + "\n" +
 					"Format: " + result.format + "\n" +
 					"Cancelled: " + result.cancelled);
-			  splashLoading.style.display = 'none';
 		  }, 
 		  function (error) {
 			  alert("Scanning failed: " + error);
 			  splashLoading.style.display = 'none';
 		  }
 	   );
+	}
+	
+	function abrir_mapa(){
+		cambiar_contenido('views/mapa.html', 'Rafaela', true, true, true, qr_parametros.color_cabecera_fondo, qr_parametros.color_cabecera_borde); 
+		abrir_menu();
+	}
+	
+	function abrir_agenda(){
+		cambiar_contenido('views/agenda.html', 'Agenda de eventos', true, true, true, agenda_parametros.color_cabecera_fondo, agenda_parametros.color_cabecera_borde); 
+		abrir_menu();
 	}
 </script>
 

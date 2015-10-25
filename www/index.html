@@ -12,10 +12,7 @@
     
     <!-- MENU -->
     <link href="css/snap.css" rel="stylesheet">
-        
-    <link href="css/index.css" rel="stylesheet" type="text/css">
-	<link href="css/reproductor_audio.css" rel="stylesheet" type="text/css">
-
+    
     <!-- SPLASH LOADING -->
     <link href="css/loading.css" rel="stylesheet" type="text/css">
     <link href="css/animacion_descarga.css" rel="stylesheet" type="text/css">    
@@ -23,8 +20,12 @@
     <!-- TOGGLES -->
     <link href="css/toggles.css" rel="stylesheet" type="text/css"> 
     
-    <link href="css/lightbox/jquery.fancybox.css" rel="stylesheet" type="text/css">      
+    <link href="css/lightbox/jquery.fancybox.css" rel="stylesheet" type="text/css"> 
     
+    <link href="js/ol3/ol.css" rel="stylesheet" type="text/css">          
+    
+    <link href="css/index.css" rel="stylesheet" type="text/css">        
+	<link href="css/reproductor_audio.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<style>
@@ -128,6 +129,12 @@
     <script type="text/javascript" src="js/libs/jquery.fancybox.js"></script>
     <script type="text/javascript" src="js/libs/zoom.js"></script>   <!-- e-smart-zoom-jquery.min --> 
     <script type="text/javascript" src="js/libs/jssor.slider-20.mini.js"></script> 
+    <script type="text/javascript" src="js/ol3/ol.js"></script>  
+        
+    <script type="text/javascript" src="js/controllers/agendas.js"></script>
+    <script type="text/javascript" src="js/controllers/puntos.js"></script>         
+    <script type="text/javascript" src="js/controllers/multimedias.js"></script>         
+    <script type="text/javascript" src="js/controllers/layers.js"></script>         
     
     <script>
 		app.initialize();
@@ -137,8 +144,7 @@
 		var archivoActivo = "";			
 		var datos_a_sincronizar = true;
 		$(document).ready(function() {	
-			var lugarAlmacenamiento = cordova.file.externalDataDirectory;
-			console.log("test:"+lugarAlmacenamiento);			
+			var lugarAlmacenamiento = cordova.file.externalDataDirectory;		
 			if(lugarAlmacenamiento == null){
 				lugarAlmacenamiento = cordova.file.dataDirectory;
 			}
@@ -149,7 +155,8 @@
 			insertar_html("views/menu.html", "menu");
 			insertar_html("views/cabecera.html", "cabecera");
 //			 window.localStorage.clear();		
-			verificar_recorridos();						
+			verificar_actualizaciones();
+			//console.log("test dia: " + obtener_dia_semana("2015-04-01"));				
 		});		
 		
 		function iniciarApp(){
@@ -158,20 +165,11 @@
 			if((ult_web == null)||(saltear_saludo == null)||(saltear_saludo == "false")){
 				cambiar_contenido("views/saludo.html", "", false, true);			
 			}else{
-				var ult_web_menu = window.localStorage.getItem("ultima_web_menu");			
-				var ult_web_pie = window.localStorage.getItem("ultima_web_pie");			
-				var ult_web_cabecera = window.localStorage.getItem("ultima_web_cabecera");			
-				cambiar_contenido(ult_web, ult_web_cabecera, ult_web_menu, ult_web_pie);			
+				get_ultima_pagina();
 			}
 		}
-		
-		function verificar_recorridos(){
-			archivoActivo =  "recorridos.json";		
-			window.resolveLocalFileSystemURL(urlSd + archivoActivo, existeArchivo, descargarArchivo); 
-		}
-		
-		//
-		function existeArchivo(url) {					
+
+		function verificar_actualizaciones() {					
 			$.getJSON(urlHost+urlCheckearActualizaciones+"fecha:2022-09-27", function( data ) {			
 				var items = [];
 				$.each( data, function( key, item ) {					
@@ -179,17 +177,13 @@
 					if(item.resultado==false){
 						iniciarApp();
 					}else{
-						cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);					
+						cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true, false, recorrido_parametros.color_cabecera_fondo, recorrido_parametros.color_cabecera_borde);					
 					}
 				});
 			});			
 			//cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);					
 		}
-		
-		function descargarArchivo(){
-			console.log("no existe");			
-			cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);	
-		}				
+					
 	</script>
     
 </body>

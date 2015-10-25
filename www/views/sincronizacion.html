@@ -1,7 +1,7 @@
 <html>
     <div id="sincronizacion_configuracion">
         <!--<img src="img/top_muni_mini.png" class="img-responsive" />-->
-        <div class="col-md-12" style="margin: 10px; margin-top: 35px;">
+        <div class="col-md-12" style="margin: 10px; margin-top: 45px;">
         	<div class="col-md-12">
                 <h4 class="color_letra_celeste"><b>Hay nueva infomación para descargarte!</b></h4>
                 <p class="color_letra_gris_claro" style="text-align: justify; font-size: 14px; margin-bottom: 20px;">Seleccione que desea tener en su celular:</p>
@@ -39,7 +39,7 @@
             </div>
          </div>
     </div>
-    <div id="sincronizacion_descargando" style="display:none; margin-top: 40px">
+    <div id="sincronizacion_descargando" style="display:none; margin-top: 45px">
 		<div class="col-md-12" style="text-align:center;">
             <h4 class="color_letra_celeste"><b>Descargando contenido!</b></h4>
             <p class="color_letra_gris_claro" style="font-size: 14px; margin-bottom: 20px;">Por favor espere un momento...</p>
@@ -66,16 +66,19 @@
 		
 	function sincronizar(){		
 		$("#sincronizacion_configuracion").hide();
-		$("#sincronizacion_descargando").show();	
+		$("#sincronizacion_descargando").show();
+		pc_crear_tabla();	
+		mc_crear_tabla();
+		lc_crear_tabla();
 		$("#estado_descarga").html("Descargando recorridos...");
 		
 		/* Descargamos los recorridos y lo guardamos en la sd */
 		var fileTransfer = new FileTransfer();	
-		var grouplayer_encriptado = encrypt(String(grouplayer_id), String(clave_encriptacion));		
+		var grouplayer_encriptado = encrypt(String(recorridos_grouplayer_id), String(clave_encriptacion));		
 		fileTransfer.download(urlHost+urlGetGroupLayer+grouplayer_encriptado, urlSd + jsonRecorridos, 
 		function(entry) {		
 			$("#estado_descarga").html("Descargando punto...");
-			descargar_puntos(urlSd + jsonRecorridos);
+			descargar_puntos(urlSd + jsonRecorridos, descargar_agenda, recorridos_grouplayer_id);
 		}, 
 		function(err) {
 			console.log("Error");
@@ -90,69 +93,165 @@
 	var iterador = 0;
 		list_descargas[iterador] = [];
 	
-	function descargar_puntos(urlJson){
+	function descargar_puntos(urlJson, proximoMetodo, grouplayer_id){
 		var recorrido_id = "";	
 		console.log("cantidad list_descargas: "+urlJson);
-		$.getJSON(urlJson, function( data ) {			
-			$.each( data, function( key, item ) {
-				recorrido_id = item.id; 
-				//console.log("cantidad list_descargas: "+item.titulo);
-				var urlDestino = urlSd + recorrido_id +"/"+"puntos.json";
-				recorrido_id_encriptado = encrypt(String(recorrido_id), String(clave_encriptacion));
-				list_descargas[iterador][0] = urlHost+urlGetLayer+recorrido_id_encriptado;
-				list_descargas[iterador][1] = urlDestino;
-				list_descargas[iterador][2] = "puntos de "+item.titulo;
-				list_descargas[iterador][3] = true;	// buscar multimedia?
-				++iterador;				
-				list_descargas[iterador] = [];	
-				
-				// descargamos el icono del layer
-				var urlDestino = urlSd + recorrido_id +"/"+item.icono;
-				recorrido_id_encriptado = encrypt(String(recorrido_id), String(clave_encriptacion));
-				list_descargas[iterador][0] = urlLayerIconos+item.icono;
-				list_descargas[iterador][1] = urlDestino;
-				list_descargas[iterador][2] = "icono de "+item.titulo;
-				list_descargas[iterador][3] = false;	// buscar multimedia?
-				++iterador;				
-				list_descargas[iterador] = [];							
-			});
+		$.getJSON(urlJson, function( data ) {	
+			if (data.length) {		
+				$.each( data, function( key, item ) {
+					var registro_layer = [];
+					recorrido_id = item.id;  								
+					registro_layer['layer_id'] = item.id;
+					registro_layer['grouplayer_id'] = grouplayer_id;
+					registro_layer['nombre'] = item.nombre;					
+					registro_layer['icono'] = item.icono;
+					registro_layer['descripcion'] = item.descripcion;
+					registro_layer['titulo'] = item.titulo;
+					registro_layer['color'] = item.color;
+					registro_layer['iconodos'] = item.iconodos;
+					registro_layer['iconomapa'] = item.iconomapa;
+					registro_layer['orden'] = item.orden;																																			
+					lc_add_layer(registro_layer);
+					
+					//console.log("cantidad list_descargas: "+item.titulo);
+					var urlDestino = urlSd+ recorrido_id +"/"+"puntos.json";
+					recorrido_id_encriptado = encrypt(String(recorrido_id), String(clave_encriptacion));
+					list_descargas[iterador][0] = urlHost+urlGetLayer+recorrido_id_encriptado;
+					list_descargas[iterador][1] = urlDestino;
+					list_descargas[iterador][2] = "puntos de "+item.titulo;
+					list_descargas[iterador][3] = true;	// buscar multimedia?
+					list_descargas[iterador][4] = true;	// es un punto?
+					list_descargas[iterador][5] = recorrido_id;
+					list_descargas[iterador][6] = grouplayer_id;					
+					
+					++iterador;				
+					list_descargas[iterador] = [];	
+					
+					// descargamos el icono del layer
+					if(item.icono != ""){
+						var urlDestino = urlSd + recorrido_id +"/"+item.icono;
+						recorrido_id_encriptado = encrypt(String(recorrido_id), String(clave_encriptacion));
+						list_descargas[iterador][0] = urlLayerIconos+item.icono;
+						list_descargas[iterador][1] = urlDestino;
+						list_descargas[iterador][2] = "icono de "+item.titulo;
+						list_descargas[iterador][3] = false;	// buscar multimedia?
+						list_descargas[iterador][4] = false;	// es un punto?	
+						list_descargas[iterador][5] = recorrido_id;
+						list_descargas[iterador][6] = grouplayer_id;											
+						++iterador;				
+						list_descargas[iterador] = [];	
+					}
+					
+					// descargamos el icono del map layer
+					if(item.icono_mapa != ""){
+						var urlDestino = urlSd + recorrido_id +"/icono_mapa.png";
+						recorrido_id_encriptado = encrypt(String(recorrido_id), String(clave_encriptacion));
+						list_descargas[iterador][0] = urlLayerIconos+item.icono_mapa;
+						list_descargas[iterador][1] = urlDestino;
+						list_descargas[iterador][2] = "icono del mapa de "+item.titulo;
+						list_descargas[iterador][3] = false;	// buscar multimedia?
+						list_descargas[iterador][4] = false;	// es un punto?						
+						list_descargas[iterador][5] = recorrido_id;
+						list_descargas[iterador][6] = grouplayer_id;						
+ 						++iterador;				
+						list_descargas[iterador] = [];
+					}
+				});
+			}
 			cantidad_descargas = iterador;
 			iterador = -1;
-			descargar(iniciarApp);
+			descargar(proximoMetodo);
 		});
+	}
+	
+	function descargar_agenda(){
+		/* Descargamos la agenda y lo guardamos en la sd */
+		var fileTransfer = new FileTransfer();
+		var pFecha = get_hoy_ing();
+		if (localStorage.getItem("act_agenda") === null) {
+			pFecha = "1900-01-01";
+		}
+		fileTransfer.download(urlHost+urlGetAgenda+pFecha, urlSd + agenda_parametros.nombre_json, 
+		function(entry) {		
+			$("#estado_descarga").html("Descargando agenda...");
+			ac_copar_json_a_bd(ac_vacio);
+			descargar_pois();
+		}, 
+		function(err) {
+			console.log("Error");
+			$("#estado_descarga").html("Error en descarga de agenda...");
+		});				
+	}
+	
+	function descargar_pois(){
+		/* Descargamos la agenda y lo guardamos en la sd */
+		var fileTransfer = new FileTransfer();	
+		var id_encriptado = encrypt(String(pois_parametros.grouplayer_id), String(clave_encriptacion));
+		fileTransfer.download(urlHost+urlGetGroupLayer+id_encriptado, urlSd + pois_parametros.nombre_json, 
+		function(entry) {		
+			$("#estado_descarga").html("Descargando puntos de interes...");
+			//pc_copar_json_a_bd();
+			descargar_puntos(urlSd + pois_parametros.nombre_json, iniciarApp, pois_parametros.grouplayer_id)
+			//iniciarApp();
+		}, 
+		function(err) {
+			console.log("Error");
+			$("#estado_descarga").html("Error en descarga de puntos de interes...");
+		});			
 	}
 	
 	function buscar_multimedias(posicion){
 		//++cantidad_descargas;
-		$.getJSON(list_descargas[posicion][1], function( data ) {			
-			$.each( data, function( key, itemaux ) {			
-				$.each( itemaux.multimedias, function( subkey, subitem ) {
-					if(subitem.tipo != 4){
-						var permitir_descarga = true;
-						if((subitem.tipo == 0) && (permitir_descargar_imagenes == false)){
-							permitir_descarga = false;
-						}
-						if((subitem.tipo == 2) && (permitir_descargar_videos == false)){
-							permitir_descarga = false;
-						}
-						if((subitem.tipo == 1) && (permitir_descargar_audios == false)){
-							permitir_descarga = false;
-						}
-						if(permitir_descarga){
+		$.getJSON(list_descargas[posicion][1], function( data ) {		
+			$.each( data, function( key, itemaux ) {	
+				if(key == "features"){			
+					$.each( itemaux, function( key, itemaux ) {			
+						$.each( itemaux.properties.multimedias, function( subkey, subitem ) {
+							var regMulti = [];
+									
 							var punto_id = subitem.entidad_id; 
 							var recorrido_id = subitem.layer_id; 	
 							var nombre_multimedia = subitem.codigo; 
-							var url_origen =  subitem.url+"/"+nombre_multimedia; 											
-							var urlDestino = urlSd + recorrido_id +"/"+punto_id+"/"+nombre_multimedia;	
-							list_descargas[cantidad_descargas] = new Array();
-							list_descargas[cantidad_descargas][0] = url_origen;
-							list_descargas[cantidad_descargas][1] = urlDestino;
-							list_descargas[cantidad_descargas][2] = "multimedias del punto: "+itemaux.titulo;					
-							list_descargas[cantidad_descargas][3] = false;	// buscar multimedia?
-							++cantidad_descargas;	
-						}
-					}
-				});
+							regMulti['id'] = subitem.id;
+							regMulti['entidad_id'] = punto_id;
+							regMulti['layer_id'] = recorrido_id;
+							regMulti['grouplayer_id'] = list_descargas[posicion][6];																												
+							regMulti['codigo'] = nombre_multimedia;
+							regMulti['titulo'] = subitem.titulo;
+							regMulti['orden'] = subitem.orden;	
+							regMulti['tipo'] = subitem.tipo;
+							regMulti['url_online'] = subitem.url;
+							mc_add_multimedia(regMulti);	// grabo en base de datos
+											
+							if(subitem.tipo != 4){ // verifico si tengo q descargar						
+								var permitir_descarga = true;
+								if((subitem.tipo == 0) && (permitir_descargar_imagenes == false)){
+									permitir_descarga = false;
+								}
+								if((subitem.tipo == 2) && (permitir_descargar_videos == false)){
+									permitir_descarga = false;
+								}
+								if((subitem.tipo == 1) && (permitir_descargar_audios == false)){
+									permitir_descarga = false;
+								}
+								if(permitir_descarga){							
+									
+									var url_origen =  subitem.url+"/"+nombre_multimedia; 											
+									var urlDestino = urlSd + recorrido_id +"/"+punto_id+"/"+nombre_multimedia;	
+									list_descargas[cantidad_descargas] = new Array();
+									list_descargas[cantidad_descargas][0] = url_origen;
+									list_descargas[cantidad_descargas][1] = urlDestino;
+									list_descargas[cantidad_descargas][2] = "multimedias del punto: "+itemaux.titulo;					
+									list_descargas[cantidad_descargas][3] = false;	// buscar multimedia?
+									list_descargas[cantidad_descargas][4] = false;
+									list_descargas[cantidad_descargas][5] = recorrido_id;	// es un punto?
+									list_descargas[cantidad_descargas][6] = 0;
+									++cantidad_descargas;	
+								}
+							}
+						});
+					});
+				}
 			});
 		});	
 	}
@@ -177,13 +276,15 @@
 					loadingStatus++;
 				}
 			};
-			console.log("holaaaa: "+list_descargas[iterador][0]);
+
 			fileTransfer.download(list_descargas[iterador][0], list_descargas[iterador][1], 
 			function(entry) {		
 				if(list_descargas[iterador][3] == true){
 					buscar_multimedias(iterador);
 				}
-		
+				if(list_descargas[iterador][4] == true){
+					guardar_punto_bd(iterador);
+				}
 				descargar(metodoSiguiente);
 			}, 
 			function(err) {
@@ -202,6 +303,46 @@
 			iterador = 0;
 			metodoSiguiente();		
 		}
+	}
+	
+	function guardar_punto_bd(posicion){
+		// recorro los campos y creo array para salvar en bd
+		$.getJSON(list_descargas[posicion][1], function( data ) {			
+			$.each( data, function( key, itemaux ) {	
+				if(key == "features"){
+					$.each( itemaux, function( subkey, subitem ) {
+						var punto_aux = [];		
+						punto_aux["layer_id"] = list_descargas[posicion][5];
+						punto_aux["grouplayer_id"] = list_descargas[posicion][6];
+						punto_aux["entidad_id"] = subitem.properties.id;
+						$.each( subitem.properties.campos, function( subkey, multitem ) {
+							
+							if(multitem.nombre == "nombre"){
+								punto_aux["nombre"] = multitem.esp;
+							}else if(multitem.nombre == "calle"){
+								punto_aux["calle"] = multitem.esp;	
+							}else if(multitem.nombre == "altura"){
+								punto_aux["altura"] = multitem.esp;	
+							}else if(multitem.nombre == "telefono"){
+								punto_aux["telefono"] = multitem.esp;	
+							}else if(multitem.nombre == "telefonodos"){
+								punto_aux["telefonodos"] = multitem.esp;	
+							}else if(multitem.nombre == "web"){
+								punto_aux["web"] = multitem.esp;	
+							}else if(multitem.nombre == "email"){
+								punto_aux["email"] = multitem.esp;	
+							}else if(multitem.nombre == "descripcion"){
+								punto_aux["descripcion"] = multitem.esp;	
+							}else if(multitem.nombre == "subtitulo"){
+								punto_aux["subtitulo"] = multitem.esp;	
+							}					
+						});	
+						punto_aux["wkt"] = subitem.properties.wkt;	
+						pc_add_punto(punto_aux);			
+					});
+				}
+			});
+		});	
 	}
 
 	function descargar_audios(){		

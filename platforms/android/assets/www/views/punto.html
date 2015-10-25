@@ -30,9 +30,9 @@
         <span class="fa fa-chevron-left jssora22r" data-u="arrowleft" style="right: 185px; background-color:#6939a6;"></span>
     </div>
 </div>
-<div id="punto_info">
-	<span id="punto_titulo"></span><br><br>
-	<span id="punto_sub_titulo"></span><br>
+<div id="punto_info" style="margin-top: 15px">
+	<a id="punto_link_mapa"><img src="img/iconos/pois.png" style="height: 35px; margin-top: 5px;float:right;"></a><span id="punto_titulo"></span><br><br>
+	<span id="punto_sub_titulo" ></span><br>
 	<span id="punto_descripcion"></span>        
 </div>
 <div class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
@@ -64,60 +64,165 @@
 	$("#reproductor").html("");
 	document.getElementById('barra_completa_sonido').onclick = adelantar_audio;
 		
-	cargar_punto();
+	inciar_punto();
 	var punto_activo = [];
 	var iterador = 0;
-	function cargar_punto(){
+	
+	function cargar_punto(tx, rs){
+		var len = rs.rows.length;
+		var contenido_html = "";
+		var fecha_ant = "";
+		var ban_primero = true;
+		for (var i=0; i<len; i++){
+			var nombre = rs.rows.item(i).nombre;
+			console.log("Test: "+rs.rows.item(i).id+"-"+rs.rows.item(i).layer_id+"-"+rs.rows.item(i).grouplayer_id+"-");
+			$("#punto_titulo").html(rs.rows.item(i).nombre);
+			$("#punto_sub_titulo").html(rs.rows.item(i).subtitulo);
+			$("#punto_descripcion").html(rs.rows.item(i).descripcion);	
+			var aux_point = rs.rows.item(i).wkt;	
+			$("#punto_link_mapa").attr("href","javascript:abrir_mapa_con_zoom('"+aux_point+"')");			
+			
+		}
+	}
+	
+	function cargar_multimedias(tx, rs){
+		var len = rs.rows.length;
+		var contenido_html = "";
+		var fecha_ant = "";
+		var ban_primero = true;
+		punto_activo["multimedias"] = [];
+		i_mul = 0;		
+		for (var i=0; i<len; i++){
+			var nombre = rs.rows.item(i).nombre;
+			console.log("Test: "+rs.rows.item(i).id+"-"+rs.rows.item(i).layer_id+"-"+rs.rows.item(i).grouplayer_id+"-");
+			if(rs.rows.item(i).tipo != 4){
+				punto_activo["multimedias"][i_mul] = [];
+				punto_activo["multimedias"][i_mul]["url_online"] = rs.rows.item(i).url_online+"/"+rs.rows.item(i).codigo;							
+				punto_activo["multimedias"][i_mul]["url_local"] = urlSd+rs.rows.item(i).layer_id+"/"+rs.rows.item(i).entidad_id+"/"+rs.rows.item(i).codigo;							
+				punto_activo["multimedias"][i_mul]["punto_id"] = rs.rows.item(i).entidad_id;
+				punto_activo["multimedias"][i_mul]["recorrido_id"] = rs.rows.item(i).layer_id;
+				punto_activo["multimedias"][i_mul]["nombre_multimedia"] = rs.rows.item(i).codigo;
+				punto_activo["multimedias"][i_mul]["tipo"] = rs.rows.item(i).tipo;
+				i_mul++;
+			}		
+		}
+		/* Pintamos la multimedia del punto */
+		var contenido_imagenes = "";
+		var contenido_imagenes_slider = "";
+		var contenido_videos = "";			
+		var url_multi = "img/1.jpg"; 
+		var cc_imagenes = 0;
+		$.each( punto_activo.multimedias, function( subkey, mult ) {				
+			if(mult.tipo == 0){ //imagenes
+				cc_imagenes++;
+				contenido_imagenes += '<div class="col-xs-6 col-sm-4 col-md-3" style="padding: 5px;">';
+				contenido_imagenes += '	  <a id="mult_a_'+iterador+'" href="#" class="fancybox">';
+				contenido_imagenes += "		  <div id='mult_div_"+iterador+"' class='punto_foto_galeria' alt='Image description'>";
+				contenido_imagenes += '			<img src="img/iconos/camara.png" class="punto_icono_multimedia" />';
+				contenido_imagenes += '		  </div>';
+				contenido_imagenes += '	  </a>';
+				contenido_imagenes += '</div>';		
+				
+				contenido_imagenes_slider +='<div style="display: none;">';
+				contenido_imagenes_slider +='<img id="slider_img_'+iterador+'" data-u="image" src="" />';
+				contenido_imagenes_slider +='</div>';
+			}
+
+			if(mult.tipo == 2){ // videos
+				contenido_videos += '<div class="col-xs-12 col-sm-8 col-md-6" style="padding: 5px;">';
+				contenido_videos += "	  <a id='multi_video_a_"+iterador+"'>";
+				contenido_videos += "		  <div class='punto_foto_galeria' style='background-image: url(\"img/1.jpg\");' alt='Image description'>";
+				contenido_videos += '			<img src="img/iconos/video.png" class="punto_icono_multimedia" />';
+				contenido_videos += '			<img src="img/1.jpg"  alt="Image description" style="display:none;" />';
+				contenido_videos += '		  </div>';
+				contenido_videos += '	  </a>';
+				contenido_videos += '</div>';        				
+			}	
+			
+
+			/* verificamos si existe en la sd, sino buscamos en internet*/
+			iterador++;	
+		});
+		if(cc_imagenes > 0){
+			$("#ps_imagenes").html(contenido_imagenes_slider);
+			$("#imagenes_del_punto").html(contenido_imagenes);
+		}else{
+			$("#punto_slider").hide();
+		}
+		$("#videos_del_punto").html(contenido_videos);
+		$(".fancybox").fancybox({
+			afterShow: function(current, previous) {
+				$('.fancybox-image').smartZoom({'containerClass':'zoomableContainer'});
+			}
+		});
+
+		iterador = 0;
+		verificar_existencia_archivo(punto_activo.multimedias[iterador].url_local, iterador);		
+	}
+	
+	function inciar_punto(){		
 		$("#foot_contenido_extra").hide();
 		var recorrido_id = window.localStorage.getItem("recorrido_activo_id");
 		var punto_id =  window.localStorage.getItem("punto_activo_id");
-		$.getJSON(urlSd + recorrido_id +"/"+"puntos.json", function( subdata ) {																								
-			$.each( subdata, function( subkey, subitem ) {   
-				if(subitem.id == punto_id){
-					//punto_activo["titulo"] = subitem.titulo;
-					punto_activo["multimedias"] = [];
-					i_mul = 0;
-					$.each(subitem.multimedias, function( mulkey, multitem ) {
-						if(multitem.tipo != 4){
-							punto_activo["multimedias"][i_mul] = [];
-							punto_activo["multimedias"][i_mul]["url_online"] = multitem.url+"/"+multitem.codigo;							
-							punto_activo["multimedias"][i_mul]["url_local"] = urlSd+multitem.layer_id+"/"+multitem.entidad_id+"/"+multitem.codigo;							
-							punto_activo["multimedias"][i_mul]["punto_id"] = multitem.entidad_id;
-							punto_activo["multimedias"][i_mul]["recorrido_id"] = multitem.layer_id;
-							punto_activo["multimedias"][i_mul]["nombre_multimedia"] = multitem.codigo;
-							punto_activo["multimedias"][i_mul]["tipo"] = multitem.tipo;
-							i_mul++;
-						}					
+		var group_id =  window.localStorage.getItem("group_activo_id");
+		
+		pc_get_punto(punto_id, recorrido_id, group_id, cargar_punto);
+		mc_get_multimedias(punto_id, recorrido_id, group_id, cargar_multimedias);	
+		/*
+		$.getJSON(urlSd + recorrido_id +"/"+"puntos.json", function( subdata ) {																											
+			$.each( subdata, function( subkey, sitem ) {   
+				if(subkey == "features"){
+					$.each( sitem, function( subkey, subitem ) {
+						if(subitem.properties.id == punto_id){
+							//punto_activo["titulo"] = subitem.titulo;
+							punto_activo["multimedias"] = [];
+							i_mul = 0;
+							$.each(subitem.properties.multimedias, function( mulkey, multitem ) {
+								if(multitem.tipo != 4){
+									punto_activo["multimedias"][i_mul] = [];
+									punto_activo["multimedias"][i_mul]["url_online"] = multitem.url+"/"+multitem.codigo;							
+									punto_activo["multimedias"][i_mul]["url_local"] = urlSd+multitem.layer_id+"/"+multitem.entidad_id+"/"+multitem.codigo;							
+									punto_activo["multimedias"][i_mul]["punto_id"] = multitem.entidad_id;
+									punto_activo["multimedias"][i_mul]["recorrido_id"] = multitem.layer_id;
+									punto_activo["multimedias"][i_mul]["nombre_multimedia"] = multitem.codigo;
+									punto_activo["multimedias"][i_mul]["tipo"] = multitem.tipo;
+									i_mul++;
+								}					
+							});
+							punto_activo["titulo"] = "";
+							punto_activo["subtitulo"] = "";	
+							var aux_point = subitem.properties.wkt;	
+							$("#punto_link_mapa").attr("href","javascript:abrir_mapa_con_zoom('"+aux_point+"')");			
+							$.each( subitem.properties.campos, function( subkey, multitem ) {
+								if(multitem.nombre == "nombre"){
+									punto_activo["titulo"] = multitem.valor;
+								}
+								if(multitem.nombre == "subtitulo"){
+									punto_activo["subtitulo"] = multitem.valor;
+								}
+								if(multitem.nombre == "descripcion"){
+									punto_activo["descripcion"] = multitem.valor;
+								}
+							});					
+						}
 					});
-					punto_activo["titulo"] = "";
-					punto_activo["subtitulo"] = "";					
-					$.each( subitem.campos, function( subkey, multitem ) {
-						if(multitem.nombre == "nombre"){
-							punto_activo["titulo"] = multitem.valor;
-						}
-						if(multitem.nombre == "subtitulo"){
-							punto_activo["subtitulo"] = multitem.valor;
-						}
-						if(multitem.nombre == "descripcion"){
-							punto_activo["descripcion"] = multitem.valor;
-						}						
-					});					
 				}
 			});
 			
-			/* Pintamos la info del punto */
+			/* Pintamos la info del punto 
 			$("#punto_titulo").html(punto_activo.titulo);
 			$("#punto_sub_titulo").html(punto_activo.subtitulo);
-			$("#punto_descripcion").html(punto_activo.descripcion);						
+			$("#punto_descripcion").html(punto_activo.descripcion);	*/					
 			
-			/* Pintamos la multimedia del punto */
+			/* Pintamos la multimedia del punto 
 			var contenido_imagenes = "";
 			var contenido_imagenes_slider = "";
 			var contenido_videos = "";			
 			var url_multi = "img/1.jpg"; 
-			
+			var cc_imagenes = 0;
 			$.each( punto_activo.multimedias, function( subkey, mult ) {				
 				if(mult.tipo == 0){ //imagenes
+					cc_imagenes++;
 					contenido_imagenes += '<div class="col-xs-6 col-sm-4 col-md-3" style="padding: 5px;">';
 					contenido_imagenes += '	  <a id="mult_a_'+iterador+'" href="#" class="fancybox">';
 					contenido_imagenes += "		  <div id='mult_div_"+iterador+"' class='punto_foto_galeria' alt='Image description'>";
@@ -143,11 +248,15 @@
 				}	
 				
 
-				/* verificamos si existe en la sd, sino buscamos en internet*/
+				/* verificamos si existe en la sd, sino buscamos en interne/
 				iterador++;			
 			});
-			$("#ps_imagenes").html(contenido_imagenes_slider);
-			$("#imagenes_del_punto").html(contenido_imagenes);			
+			if(cc_imagenes > 0){
+				$("#ps_imagenes").html(contenido_imagenes_slider);
+				$("#imagenes_del_punto").html(contenido_imagenes);
+			}else{
+				$("#punto_slider").hide();
+			}
 			$("#videos_del_punto").html(contenido_videos);
 			$(".fancybox").fancybox({
 				afterShow: function(current, previous) {
@@ -157,7 +266,7 @@
 
 			iterador = 0;
 			verificar_existencia_archivo(punto_activo.multimedias[iterador].url_local, iterador);
-		});									
+		});*/									
 	}
 	
 	/* Recorremos uno detras de otro, por que son tareas asincronas, sino hace lio */
@@ -209,6 +318,8 @@
 		if(iterador < (punto_activo.multimedias.length-1)){
 			iterador++;		
 			verificar_existencia_archivo(punto_activo.multimedias[iterador].url_local, iterador);	
+		}else{
+			activar_slider();
 		}
 	}
 	
@@ -218,6 +329,22 @@
 	function abrir_video(nombre){
 		var ref = window.open(nombre, '_blank', 'location=no');
 	}				
+	
+	function abrir_mapa_con_zoom(point){
+		mapa_urlSd = urlSd + window.localStorage.getItem("recorrido_activo_id")+"/";
+		mapa_hacer_zoom = true;
+		mapa_punto = point;
+		if( window.localStorage.getItem("group_activo_id") == recorrido_parametros.grouplayer_id){
+			titulo = "Recorrido";
+			color_cabecera_fondo = recorrido_parametros.color_cabecera_fondo;
+			color_cabecera_borde = recorrido_parametros.color_cabecera_borde;		
+		}else if( window.localStorage.getItem("group_activo_id") == pois_parametros.grouplayer_id){
+			titulo = "Punto de Interes";
+			color_cabecera_fondo = pois_parametros.color_cabecera_fondo;
+			color_cabecera_borde = pois_parametros.color_cabecera_borde;		
+		}		
+		cambiar_contenido('views/mapa.html', titulo, true, true, true, color_cabecera_fondo, color_cabecera_borde); 
+	}	
 </script>
 
 <script>

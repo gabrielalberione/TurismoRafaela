@@ -1,14 +1,30 @@
 <nav class="navbar navbar-default navbar-fixed-top">        
-    <div class="container fondo_top">
+    <div id="cabecera_top" class="container fondo_top">
         <div id="do-drag" style="height: 50px;">
             <div id="btn_menu" onClick="abrir_menu()" class="sb-toggle-left top_btn_menu"><em class="fa fa-bars"></em></div>
-            <div id="top_titulo"><span id="cabecera_titulo"></span></div>
-            <div id="botonera_top"><i class="fa fa-refresh"></i></div>
+            <div id="cabecera_resto">
+                <div id="top_titulo"><span id="cabecera_titulo"></span></div>
+                <div class="botonera_top"><i class="fa fa-qrcode"></i><a href="javascript:abrir_buscar();"><i class="fa fa-search"></i></a></div>
+            </div>
+            <div id="cabecera_busqueda">
+            	<input type="search" placeholder="Buscar......" name="search" class="searchbox-input" onkeyup="buttonUp();">
+                <div class="botonera_top"><a href="javascript:abrir_buscar();"><i class="fa fa-search"></i></a><a href="javascript:cerrar_buscar();"><i class="fa fa-times"></i></a></div>
+            </div>
         </div>	    
     </div>         
 </nav>
-  <script>
-		$(document).ready(function() {	
-			$("#cabecera_titulo").text(textCabecera);
-		});
+<script>
+	$(document).ready(function() {	
+		$("#cabecera_titulo").text(textCabecera);
+	});
+	
+	function abrir_buscar(){
+		$("#cabecera_resto").hide();
+		$("#cabecera_busqueda").show();			
+	}
+	
+	function cerrar_buscar(){
+		$("#cabecera_resto").show();
+		$("#cabecera_busqueda").hide();			
+	}
 </script>

@@ -30,7 +30,8 @@
 		var no_mostrar_mas = false;
 		function avanza(){
 			window.localStorage.setItem("saltear_saludo", no_mostrar_mas);
-			cambiar_contenido("views/recorridos.html", "Recorridos", true, true);
+			window.localStorage.setItem("group_activo_id", recorrido_parametros.grouplayer_id);
+			cambiar_contenido('views/layers.html', 'Recorridos', true, true, true, recorrido_parametros.color_cabecera_fondo, recorrido_parametros.color_cabecera_borde); 
 		}
 		
 		function no_volver_a_mostrar(){
