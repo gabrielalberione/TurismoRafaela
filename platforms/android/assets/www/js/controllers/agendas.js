@@ -51,7 +51,7 @@ function ac_get_top(func_success){
 	dbGuiaR.transaction(function(tx) {
 		//var fecha_from = new Date().getTime();
 		var fecha_from = new Date("2015-10-02").getTime();
-		tx.executeSql('SELECT id, titulo, fecha_inicio, horario, fecha_inicio_int FROM AGENDA where fecha_inicio_int >= ? ORDER BY fecha_inicio ASC', [fecha_from], func_success, ac_errorCB);
+		tx.executeSql('SELECT * FROM AGENDA where fecha_inicio_int >= ? ORDER BY fecha_inicio ASC', [fecha_from], func_success, ac_errorCB);
 	}, ac_errorCB, ac_vacio);				
 }
 
