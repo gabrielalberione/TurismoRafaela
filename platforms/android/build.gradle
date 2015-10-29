@@ -21,6 +21,7 @@
 
 apply plugin: 'android'
 
+
 buildscript {
     repositories {
         mavenCentral()
@@ -173,6 +174,13 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+	
+	lintOptions {
+		checkReleaseBuilds false
+		// Or, if you prefer, you can continue to check for errors in release builds,
+		// but continue the build even when errors are found:
+		abortOnError false
+	}
 
     defaultConfig {
         versionCode cdvVersionCode ?: Integer.parseInt("" + privateHelpers.extractIntFromManifest("versionCode") + "0")

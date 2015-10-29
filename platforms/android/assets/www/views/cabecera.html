@@ -4,7 +4,7 @@
             <div id="btn_menu" onClick="abrir_menu()" class="sb-toggle-left top_btn_menu"><em class="fa fa-bars"></em></div>
             <div id="cabecera_resto">
                 <div id="top_titulo"><span id="cabecera_titulo"></span></div>
-                <div class="botonera_top"><i class="fa fa-qrcode"></i><a href="javascript:abrir_buscar();"><i class="fa fa-search"></i></a></div>
+                <div class="botonera_top"><a href="javascript:cv_abrir_qr();"><i class="fa fa-qrcode"></i></a><a href="javascript:abrir_buscar();"><i class="fa fa-search"></i></a></div>
             </div>
             <div id="cabecera_busqueda">
             	<input type="search" placeholder="Buscar......" name="search" class="searchbox-input" onkeyup="buttonUp();">
@@ -21,6 +21,10 @@
 	function abrir_buscar(){
 		$("#cabecera_resto").hide();
 		$("#cabecera_busqueda").show();			
+	}
+	
+	function cv_abrir_qr(){
+		cambiar_contenido('views/ayuda_lector.html', 'Lector QR', true, true, true, qr_parametros.color_cabecera_fondo, qr_parametros.color_cabecera_borde); 
 	}
 	
 	function cerrar_buscar(){

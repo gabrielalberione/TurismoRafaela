@@ -7,12 +7,16 @@
 <div id="layers_listado">
 </div>
 <script>
-	iniciar_layers();
 	var layers = [];
 	var layer_id = 0;
 	var i = 0;
+	$( document ).ready( function() { 
+		iniciar_layers();
+	});
 	
 	function iniciar_layers(){
+		//activar_loading();		
+		console.log("hola iniciar_layers");		
 		window.resolveLocalFileSystemURL(urlSd + recorrido_parametros.nombre_json, function(){lc_get_layers( window.localStorage.getItem("group_activo_id"),cargar_layers);}, function(){cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true, false, recorrido_parametros.color_cabecera_fondo, recorrido_parametros.color_cabecera_borde);}); 
 	}
 	
@@ -22,17 +26,23 @@
 		for (var i=0; i<len; i++){			
 			contenido_list += "<div class='col-xs-12 row' style='padding: 0px;'>";
 			contenido_list += "<div class='col-xs-3' onClick='cargar_entidades("+rs.rows.item(i).id+")'>";
-			contenido_list += "<img  style='width: 50%; height: 50%' class='layer_icono' src='"+urlSd+rs.rows.item(i).id+"/icono_mapa.png' />";
+			contenido_list += "<img  style='height: 40px' class='layer_icono' src='"+urlSd+rs.rows.item(i).id+"/icono_mapa.png' />";
 			contenido_list += "</div>";
-			contenido_list += "<div class='col-xs-9' onClick='cargar_entidades("+rs.rows.item(i).id+")' style='padding: 0px;'>";
+			contenido_list += "<div class='col-xs-9' onClick='cargar_entidades("+rs.rows.item(i).id+")' style='padding: 0px; padding-left: 10px;'>";
 			contenido_list += "<div class='layer borde_bottom_gris color_letra_gris_claro'>";
 			contenido_list += "<span class='layer_titulo'>"+rs.rows.item(i).titulo+"</span><br>";
-			contenido_list += "<span class='layer_subtitulo color_letra_gris_claro'>"+rs.rows.item(i).descripcion+"</span></div>";			
+			var desc = rs.rows.item(i).descripcion;
+			if(rs.rows.item(i).descripcion == ""){
+				desc = "<br>";
+			}
+			contenido_list += "<span class='layer_subtitulo color_letra_gris_claro'>"+desc+"</span></div>";			
 			contenido_list += "</div>";								
 			contenido_list += "<div id='layer_puntos_"+rs.rows.item(i).id+"' style='display:none;'></div>";
 			contenido_list += "</div>";		
-			$("#layers_listado").html(contenido_list);							
 		}		
+		contenido_list += "<div class='col-xs-12 row' style='height: 100px;'><br></div>";							
+		$("#layers_listado").html(contenido_list);
+		desactivar_loading();	
 		/*$.getJSON(urlSd + jsonRecorridos, function( data ) {			
 			var contenido_list = "";
 			$.each( data, function( key, item ) {
@@ -56,26 +66,53 @@
 	}
 	
 	function cargar_info_entidades(tx, rs){
+		console.log("hola cargar_info_entidades");		
+		
 		var len = rs.rows.length;
 		var ban_primero = true;
 		var sub_contenido_list = "";																
 		for (var i=0; i<len; i++){
+			var icono_abrir = "";
+			var link_abrir = "";
+			if(window.localStorage.getItem("group_activo_id") == recorrido_parametros.grouplayer_id){
+				icono_abrir = "img/flecha_derecha.png";
+				link_abrir = "ir_a_entidad("+layer_id+","+rs.rows.item(i).id+","+window.localStorage.getItem("group_activo_id")+")";
+			}else if(window.localStorage.getItem("group_activo_id") == pois_parametros.grouplayer_id){
+				icono_abrir = "img/marker.png";
+				link_abrir = "abrir_en_mapa(\""+rs.rows.item(i).wkt+"\")";
+			}
 			var nombre = rs.rows.item(i).nombre;
 			sub_contenido_list += "<div class='col-xs-3' style='padding: 0px;'></div>";
 			sub_contenido_list += "<div class='col-xs-9 borde_bottom_gris' style='padding: 0px;'>";
-			sub_contenido_list += "<table style='width: 100%; margin: 10px 0px;' onClick='ir_a_entidad("+layer_id+","+rs.rows.item(i).id+","+window.localStorage.getItem("group_activo_id")+")'>";
+			sub_contenido_list += "<table style='width: 100%; margin: 10px 0px;' onClick='"+link_abrir+"'>";
 			sub_contenido_list += "<tr>";
 			sub_contenido_list += "<td style='width:80%;'>";
 			sub_contenido_list += "<span class='layer_titulo'>"+rs.rows.item(i).nombre+"</span><br>";
 			if(window.localStorage.getItem("group_activo_id") == recorrido_parametros.grouplayer_id){
-				sub_contenido_list += "<span class='layer_subtitulo color_letra_gris_claro'>"+rs.rows.item(i).subtitulo+"</span></div>";
+				var subtitulo = " ";
+				if(rs.rows.item(i).subtitulo != null){
+					subtitulo = rs.rows.item(i).subtitulo;
+				}
+				sub_contenido_list += "<span class='layer_subtitulo color_letra_gris_claro'>"+subtitulo+"</span></div>";
 			}else if(window.localStorage.getItem("group_activo_id") == pois_parametros.grouplayer_id){
-				sub_contenido_list += "<span class='layer_subtitulo color_letra_gris_claro'><b>Dirección: </b>"+rs.rows.item(i).calle+" "+rs.rows.item(i).altura+"</span></div>";
-				sub_contenido_list += "<br><span class='layer_subtitulo color_letra_gris_claro'><b>Telefono:  </b>"+rs.rows.item(i).telefono+"</span></div>";
+				var altura = " ";
+				if(rs.rows.item(i).altura != null){
+					altura = rs.rows.item(i).altura;
+				}
+				var telefono = " ";
+				if(rs.rows.item(i).telefono != null){
+					telefono = rs.rows.item(i).telefono;
+				}	
+				var calle = "N/D";
+				if(rs.rows.item(i).calle != null){
+					calle = rs.rows.item(i).calle;
+				}								
+				sub_contenido_list += "<span class='layer_subtitulo color_letra_gris_claro'><b>Dirección: </b>"+calle+" "+altura+"</span></div>";
+				sub_contenido_list += "<br><span class='layer_subtitulo color_letra_gris_claro'><b>Telefono:  </b>"+telefono+"</span></div>";
 			}
 			sub_contenido_list += "</td>";
 			sub_contenido_list += "<td rowspan='2' style='vertical-align: middle;'>";
-			sub_contenido_list += "<img onClick='ir_a_entidad("+layer_id+","+rs.rows.item(i).id+","+window.localStorage.getItem("group_activo_id")+")' style='height: 50px;' src='img/flecha_derecha.png' />";
+			sub_contenido_list += "<img style='height: 40px; margin-left: 5px;' src='"+icono_abrir+"' />";
 			sub_contenido_list += "</td></tr></table>";
 			sub_contenido_list += "</div>";				
 		}
@@ -83,7 +120,18 @@
 		toogle_div("layer_puntos_"+layer_id);
 	}
 	
+	function abrir_en_mapa(point){
+		mapa_urlSd = urlSd + layer_id+"/";
+		mapa_hacer_zoom = true;
+		mapa_punto = point;
+		color_cabecera_fondo = pois_parametros.color_cabecera_fondo;
+		color_cabecera_borde = pois_parametros.color_cabecera_borde;		
+		cambiar_contenido('views/mapa.html', "Punto de Interes", true, true, true, color_cabecera_fondo, color_cabecera_borde); 
+	}
+	
 	function cargar_entidades(pLayer_id){
+		console.log("hola cargar_entidades");		
+
 		layer_id = pLayer_id;
 		pc_get_puntos(layer_id, window.localStorage.getItem("group_activo_id"), cargar_info_entidades);
 		/*$.getJSON(urlSd + recorrido_id +"/"+"puntos.json", function( subdata ) {								

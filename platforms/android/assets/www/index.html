@@ -27,7 +27,7 @@
     <link href="css/index.css" rel="stylesheet" type="text/css">        
 	<link href="css/reproductor_audio.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body onload="onDeviceReady()">
 	<style>
 		.snapjs-left .snap-drawers {
 			display: block;
@@ -48,77 +48,15 @@
     </div>
     
     <div id="menu"></div>
-    <div id="contenido_general">
-	    <div id="cabecera"></div>
-	    <div id="contenido"  class="snap-content"></div>        
+    <div id="cabecera"></div>
+    <div id="contenido_general" class="snap-content">
+   		<div id="cabecera_menu_abierto" style="height: 60px; background-color:white">
+        	<div onClick="abrir_menu()" class="top_btn_menu" style="float:left; margin-left:15px;"><em class="fa fa-times"></em></div>       
+        </div>
+	    <div id="contenido"></div>        
     </div>    
     <div id="pie"></div>
-    
-    <!-- GALERIA - La coloco aca para que no scrollee el lightbox y ocupe toda la pantalla. -->
-    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-    
-        <!-- Background of PhotoSwipe. 
-             It's a separate element as animating opacity is faster than rgba(). -->
-        <div class="pswp__bg"></div>
-    
-        <!-- Slides wrapper with overflow:hidden. -->
-        <div class="pswp__scroll-wrap">
-    
-            <!-- Container that holds slides. 
-                PhotoSwipe keeps only 3 of them in the DOM to save memory.
-                Don't modify these 3 pswp__item elements, data is added later on. -->
-            <div class="pswp__container">
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-            </div>
-    
-            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-            <div class="pswp__ui pswp__ui--hidden">
-    
-                <div class="pswp__top-bar">
-    
-                    <!--  Controls are self-explanatory. Order can be changed. -->
-    
-                    <div class="pswp__counter"></div>
-    
-                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-    
-                    
-    
-                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-    
-                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-    
-                    <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                    <div class="pswp__preloader">
-                        <div class="pswp__preloader__icn">
-                          <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                    <div class="pswp__share-tooltip"></div> 
-                </div>
-    
-                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-                </button>
-    
-                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-                </button>
-    
-                <div class="pswp__caption">
-                    <div class="pswp__caption__center"></div>
-                </div>
-    
-            </div>
-    
-        </div>
-    
-    </div>
+ 
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>	
     <script type="text/javascript" src="js/utiles.js"></script>	    
@@ -138,39 +76,35 @@
     
     <script>
 		app.initialize();
-		
-		//alert(encrypt("1363","93bt0QWJ"));
-		var urlSd = "";
-		var archivoActivo = "";			
-		var datos_a_sincronizar = true;
-		$(document).ready(function() {	
-			var lugarAlmacenamiento = cordova.file.externalDataDirectory;		
-			if(lugarAlmacenamiento == null){
-				lugarAlmacenamiento = cordova.file.dataDirectory;
-			}
-
+		function onFileSystemSuccess(fileSystem) {
+			var lugarAlmacenamiento = fileSystem.root.nativeURL;
+			console.log("alm_: "+ lugarAlmacenamiento);	
 			urlSd = lugarAlmacenamiento + "GuiaR/";
-			document.addEventListener("backbutton", onBackKeyDown, false);
 			insertar_html("views/pie.html", "pie");								
 			insertar_html("views/menu.html", "menu");
 			insertar_html("views/cabecera.html", "cabecera");
 //			 window.localStorage.clear();		
 			verificar_actualizaciones();
-			//console.log("test dia: " + obtener_dia_semana("2015-04-01"));				
-		});		
+			//console.log("test dia: " + obtener_dia_semana("2015-04-01"));
+		}
+		
+		//alert(encrypt("1363","93bt0QWJ"));
+		var urlSd = "";
+		var archivoActivo = "";			
+		var datos_a_sincronizar = true;	
 		
 		function iniciarApp(){
 			var ult_web = window.localStorage.getItem("ultima_web");
 			var saltear_saludo = window.localStorage.getItem("saltear_saludo");
 			if((ult_web == null)||(saltear_saludo == null)||(saltear_saludo == "false")){
-				cambiar_contenido("views/saludo.html", "", false, true);			
+				cambiar_contenido("views/saludo.html", "", false, true, false, recorrido_parametros.color_cabecera_fondo, recorrido_parametros.color_cabecera_borde);			
 			}else{
 				get_ultima_pagina();
 			}
 		}
 
 		function verificar_actualizaciones() {					
-			$.getJSON(urlHost+urlCheckearActualizaciones+"fecha:2022-09-27", function( data ) {			
+			$.getJSON(urlHost+urlCheckearActualizaciones+"fecha:"+get_hoy_ing(), function( data ) {			
 				var items = [];
 				$.each( data, function( key, item ) {					
 					console.log(item.resultado);	
@@ -181,9 +115,20 @@
 					}
 				});
 			});			
-			//cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);					
+			cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);					
 		}
-					
+		
+		function onFileSystemFail(evt) {
+			console.log(evt.target.error.code);
+		}
+		
+		function init() {
+			document.addEventListener("deviceready", onDeviceReady, false);
+		}
+		function onDeviceReady() {
+			document.addEventListener("backbutton", onBackKeyDown, false);
+			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemFail);
+		}					
 	</script>
     
 </body>

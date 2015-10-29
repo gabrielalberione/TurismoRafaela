@@ -1,13 +1,13 @@
 <style>	
     .ol-zoom{
-        display: block;
+        display: none;
 		top: auto;
 		bottom: 10px;
 		left: 10px;
     }
 </style>
 
-<nav id="divInfoEntidad" class="navbar navbar-default navbar-fixed-top" style="display:none; width:100%; padding: 0px 15px;">        
+<nav id="divInfoEntidad" class="navbar navbar-default navbar-fixed-top" style="display:none; width:100%; padding: 0px 15px; margin-top: 50px;">        
     <div id="swipe_zona_marker;" style="border-bottom: solid 2px #e5e5e5;">
         <div class="row">
             <div class="col-xs-12"> 
@@ -21,11 +21,12 @@
         <i id="marker_flecha" class="fa fa-caret-up" style="padding: 8px; font-size: 16px;"></i>
     </div>    
 </nav>
-
-<div id="map" style="width:100%;height:100%;z-index:2000;"></div>
+<div>
+	<div id="map" style="width:100%;height:100%;z-index:2000;"></div>
+</div>
 
 <a href="javascript:centrarMiPosicion();">
-    <div style="z-index:1000; float:right; position:absolute; bottom:100px; right:10px">          
+    <div style="z-index:1000; float:right; position:absolute; bottom:50px; right:10px">          
          <img src="img/iconos/posicion.png" style="height: 50px; padding-top:2px">
     </div>         
 </a>
@@ -43,8 +44,8 @@
 	var urlGeoJson = mapa_urlSd + "puntos.json";
 	var urlIcono = mapa_urlSd + "icono_mapa.png";
 	
-	var posInicial = [-6506141.183454158, -4110246.2464916063];
-	var posActual = [-6506141.183454158, -4110246.2464916063];	
+	var posInicial = [-3479009.93698798, -8739656.91272008];
+	var posActual = [-3479009.93698798, -8739656.91272008];	
 
 	var featurePosActual;
 	
@@ -67,8 +68,7 @@
 	var ban_estado_conexion = true;
 	
 	
-	$( document ).ready( function() { 
-		$("#foot_contenido_extra").hide();
+	$( document ).ready( function() { 		
 		inicializar(); 
 		//navigator.geolocation.getCurrentPosition(onSuccessGPS, onErrorGPS);  
 		var watchID = navigator.geolocation.watchPosition(onSuccessGPS, onErrorGPS, { timeout: 3000, enableHighAccuracy: true  });				
@@ -106,7 +106,7 @@
 		/* END crea los mapas bases */
 		
 		view = new ol.View({
-			center: posInicial,
+			center: ol.proj.transform([-61.49179, -31.25273],'EPSG:4326','EPSG:3857'),
 			zoom: 12
 		});
 		/**/
@@ -148,7 +148,7 @@
 						anchor: [32, 64],
 						anchorXUnits: 'pixels',
 						anchorYUnits: 'pixels',
-						scale: 0.5,
+						scale: 0.3,
 						opacity: 0.90,				
 						//src: urlHost+'/files/icons_layers/lugaresoficiales_rubro_'+feature.get('rubro_id')+'.png'
 						src: urlIcono
@@ -160,7 +160,7 @@
 		
 		map.addLayer(vectorLayer);	
 		
-		view.setCenter(posInicial);
+		view.setCenter(ol.proj.transform([-61.49179, -31.25273],'EPSG:4326','EPSG:3857'));
 				
 		if(mapa_hacer_zoom){
 			var res = mapa_punto.replace("POINT", "");
@@ -178,9 +178,20 @@
 		map.forEachFeatureAtPixel(pixel, function(feature, layer) {
 			if ((layer.get('type') != 'base') && (layer.get('nombre') != 'vectorLyBusqueda') && (layer.get('nombre') != 'vectorLyDibujo')){
 				$('#infoEntidadTitulo').html(feature.get('titulo'));
-				var accion_aux = "javascript:ir_a_entidad('"+window.localStorage.getItem("recorrido_activo_id")+"','"+feature.get('id')+"','"+window.localStorage.getItem("group_activo_id")+"')";
-				console.log(accion_aux);
-				$("#entidadLink").attr("href",accion_aux);
+				if(window.localStorage.getItem("group_activo_id") == recorrido_parametros.grouplayer_id){
+					var accion_aux = "javascript:ir_a_entidad('"+window.localStorage.getItem("recorrido_activo_id")+"','"+feature.get('id')+"','"+window.localStorage.getItem("group_activo_id")+"')";
+					//console.log(accion_aux);
+					$("#entidadLink").attr("href",accion_aux);
+				}else{
+					$("#entidadLink").hide();
+					var html_te = feature.get('calle')+" "+feature.get('altura')+"<br>";
+					var telefono = " ";
+					if(feature.get('telefono') != null){
+						telefono = feature.get('telefono');
+					}
+					html_te += telefono;
+					$('#infoEntidadCopete').html(html_te);					
+				}
 				/*var copete = feature.get('rubro');
 				copete += '<br><i class="fa fa-map-marker marker_info_iconos" style="padding-left: 3px; padding-right: 2px;"></i> '+feature.get('calle')+' '+feature.get('altura');
 				copete += '<br><i class="fa fa-flag marker_info_iconos"></i>  a ' + obtenerDistancia(feature.getGeometry().getCoordinates(), posActual);

@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
+	 <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+    
+    <title>Guia.R</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="css/font-awesome.css" rel="stylesheet" type="text/css">    
+    
+    <!-- MENU -->
+    <link href="css/snap.css" rel="stylesheet">
+    
+    <!-- SPLASH LOADING -->
+    <link href="css/loading.css" rel="stylesheet" type="text/css">
+    <link href="css/animacion_descarga.css" rel="stylesheet" type="text/css">    
+    
+    <!-- TOGGLES -->
+    <link href="css/toggles.css" rel="stylesheet" type="text/css"> 
+    
+    <link href="css/lightbox/jquery.fancybox.css" rel="stylesheet" type="text/css"> 
+    
+    <link href="js/ol3/ol.css" rel="stylesheet" type="text/css">          
+    
+    <link href="css/index.css" rel="stylesheet" type="text/css">        
+	<link href="css/reproductor_audio.css" rel="stylesheet" type="text/css">
+</head>
+<body onload="onDeviceReady()">
+	<style>
+		.snapjs-left .snap-drawers {
+			display: block;
+		}
+		.snap-drawers {
+			display: none;
+			background-color:#FFF;
+		}
+		.snap-drawer{
+			background-color:#FFF;
+			box-shadow: 5px 0px 20px #888888;			
+		}
+	</style>
+    	<div>
+        	<a href="javascript:test();">teste</a>
+        </div>    
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>	
+    <script type="text/javascript" src="js/utiles.js"></script>	    
+    <script type="text/javascript" src="js/libs/jquery.js"></script>	
+    <script type="text/javascript" src="js/libs/bootstrap.min.js"></script>	
+    <script type="text/javascript" src="js/libs/reproductor_audio.js"></script> 
+    <script type="text/javascript" src="js/libs/snap.js"></script> 
+    <script type="text/javascript" src="js/libs/jquery.fancybox.js"></script>
+    <script type="text/javascript" src="js/libs/zoom.js"></script>   <!-- e-smart-zoom-jquery.min --> 
+    <script type="text/javascript" src="js/libs/jssor.slider-20.mini.js"></script> 
+    <script type="text/javascript" src="js/ol3/ol.js"></script>  
+        
+    <script type="text/javascript" src="js/controllers/agendas.js"></script>
+    <script type="text/javascript" src="js/controllers/puntos.js"></script>         
+    <script type="text/javascript" src="js/controllers/multimedias.js"></script>         
+    <script type="text/javascript" src="js/controllers/layers.js"></script>         
+    
+    <script>
+		app.initialize();
+		
+		function test(){
+			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemFail);									
+		}
+		
+		function onFileSystemSuccess(fileSystem) {
+			var lugarAlmacenamiento =  fileSystem.root.nativeURL;
+			console.log("alm_: "+ lugarAlmacenamiento);	
+			urlSd = lugarAlmacenamiento + "GuiaR/";
+			document.addEventListener("backbutton", onBackKeyDown, false);
+			insertar_html("views/pie.html", "pie");								
+			insertar_html("views/menu.html", "menu");
+			insertar_html("views/cabecera.html", "cabecera");
+//			 window.localStorage.clear();		
+			verificar_actualizaciones();
+			//console.log("test dia: " + obtener_dia_semana("2015-04-01"));
+		}
+		
+		//alert(encrypt("1363","93bt0QWJ"));
+		var urlSd = "";
+		var archivoActivo = "";			
+		var datos_a_sincronizar = true;
+		$(document).ready(function() {	
+			//window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemFail);						
+		});		
+		
+		function iniciarApp(){
+			var ult_web = window.localStorage.getItem("ultima_web");
+			var saltear_saludo = window.localStorage.getItem("saltear_saludo");
+			if((ult_web == null)||(saltear_saludo == null)||(saltear_saludo == "false")){
+				cambiar_contenido("views/saludo.html", "", false, true, true);			
+			}else{
+				get_ultima_pagina();
+			}
+		}
+
+		function verificar_actualizaciones() {					
+			$.getJSON(urlHost+urlCheckearActualizaciones+"fecha:2022-09-27", function( data ) {			
+				var items = [];
+				$.each( data, function( key, item ) {					
+					console.log(item.resultado);	
+					if(item.resultado==false){
+						iniciarApp();
+					}else{
+						cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true, false, recorrido_parametros.color_cabecera_fondo, recorrido_parametros.color_cabecera_borde);					
+					}
+				});
+			});			
+			//cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true);					
+		}
+		
+    function onDirectorySuccess(parent) {
+    
+      console.log(parent);
+    }
+    
+    function onDirectoryFail(error) {
+        alert("Unable to create new directory: " + error.code);
+    }
+    
+    function onFileSystemFail(evt) {
+        console.log(evt.target.error.code);
+    }
+	
+	function init() {
+    	document.addEventListener("deviceready", onDeviceReady, false);
+	}
+	function onDeviceReady() {
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemFail);
+	}
+					
+	</script>
+    
+</body>
+</html>

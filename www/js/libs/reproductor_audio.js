@@ -5,10 +5,14 @@ var mediaTimer = null;
 var duracion_sonido = 0;
 var position_sonido = 0;
 var arrancar_de_nuevo = true;
+var reproducciendo_punto_id = 0;
 
 // Play audio
 //
 function playAudio() {
+	if(window.localStorage.getItem("punto_activo_id") != reproducciendo_punto_id){
+		arrancar_de_nuevo = true;		
+	}		
 	// Create Media object from src
 	if(arrancar_de_nuevo == true){
 		my_media = new Media(audio_src, onSuccess, onError);
@@ -16,6 +20,8 @@ function playAudio() {
 	}
 	$("#repro_play").hide();
 	$("#repro_pause").show();
+	
+	reproducciendo_punto_id = window.localStorage.getItem("punto_activo_id");
 	// Play audio
 	my_media.play();
 

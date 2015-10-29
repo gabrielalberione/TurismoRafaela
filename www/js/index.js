@@ -44,7 +44,7 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('deviceready', this.onDeviceReady, true);
 		document.addEventListener('focusout', function(e) {window.scrollTo(0, 0)});
     },
     // deviceready Event Handler
@@ -52,7 +52,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        app.receivedEvent('deviceready');		
     },
 		
     // Update DOM on a Received Event
@@ -91,8 +91,11 @@ function onBackKeyDown() {
 		window.localStorage.setItem("punto_activo_id", historial[nuevo_id].punto_activo_id);
 		cambiar_contenido(historial[nuevo_id].url, historial[nuevo_id].cabecera, historial[nuevo_id].menu, historial[nuevo_id].pie, false, historial[nuevo_id].cabecera_color_fondo,  historial[nuevo_id].cabecera_color_borde);
 		window.localStorage.setItem("ultima_historia_id", nuevo_id);
+		window.localStorage.setItem("layer_activo_id", historial[nuevo_id].layer_activo_id);
+		window.localStorage.setItem("punto_activo_id", historial[nuevo_id].punto_activo_id);
+		window.localStorage.setItem("group_activo_id", historial[nuevo_id].group_activo_id);		
 	}else{
-		alert("fin, desea salir?");
+		navigator.app.exitApp();
 	}
 }
 
@@ -124,41 +127,53 @@ function ir_a_entidad(recorrido_id, punto_id, group_id){
 
 
 function cambiar_contenido(pUrl, pCabecera, pMenu, pPie, pGuardarHistorial, pCabeceraColorFondo, pCabeceraColorBorde){
+	//console.log("guardar en hist: "+pGuardarHistorial);
 	if(pGuardarHistorial){
-		/* Guardamos en el historial */
-		var historial = JSON.parse(window.localStorage.getItem("historial"));
-		var ultima_historia_id = window.localStorage.getItem("ultima_historia_id");	
-		if(ultima_historia_id == null){
-			ultima_historia_id = -1;
+		/* Guardamos en el historial */ 
+		var historial = [];
+		var ultima_historia_id = -1;
+		console.log("id guardado: "+window.localStorage.getItem("ultima_historia_id"));	
+		if(window.localStorage.getItem("ultima_historia_id") != null){
+			ultima_historia_id = window.localStorage.getItem("ultima_historia_id");
 		}
 		
-		if(historial == null){
-			var historial = [];		
+		if(window.localStorage.getItem("historial") != null){
+			historial = JSON.parse(window.localStorage.getItem("historial"));	
 		}
 	
 		var historia = {};	
 		var nuevo_id = parseInt(ultima_historia_id) + 1;
 		var punto_id =  window.localStorage.getItem("punto_activo_id");
+		var group_id = window.localStorage.getItem("group_activo_id");
+		var layer_id = window.localStorage.getItem("layer_activo_id");		
 		
 		historia = {"id": nuevo_id, "url":pUrl, "pie":pPie, "menu":pMenu, 
-		"cabecera": pCabecera, "punto_activo_id":punto_id, "cabecera_color_fondo":pCabeceraColorFondo, "cabecera_color_borde":pCabeceraColorBorde};
-		
+		"cabecera": pCabecera, "punto_activo_id":punto_id, "group_activo_id":group_id, "layer_activo_id":layer_id, "cabecera_color_fondo":pCabeceraColorFondo, "cabecera_color_borde":pCabeceraColorBorde};
+		console.log("hist id: "+nuevo_id);
 		historial[nuevo_id] = historia;
 		window.localStorage.setItem("historial", JSON.stringify(historial));
-		window.localStorage.setItem("ultima_historia_id", nuevo_id);
-	}
+		window.localStorage.setItem("ultima_historia_id", nuevo_id);		
+	}		
+	
+	
+	insertar_html(pUrl, "contenido");
+	$("#foot_contenido_extra").hide();	
 	$("#cabecera").show();
+	$('#cabecera_menu_abierto').show();	
 	$("#menu").show();
 	$("#pie").show();
-	insertar_html(pUrl, "contenido");
 	$('#cabecera_top').css('background-color', pCabeceraColorFondo);
+	$('#cabecera_menu_abierto').css('background-color', pCabeceraColorFondo);
 	cabecera_actual = pCabeceraColorFondo;
-	$('#cabecera_top').css('border-top', '10px solid '+pCabeceraColorBorde);	
+	$('#cabecera_top').css('border-top', '10px solid '+pCabeceraColorBorde);
+	$('#cabecera_menu_abierto').css('border-top', '10px solid '+pCabeceraColorBorde);
+		
 	if(pCabecera != ""){
 		$("#cabecera_titulo").html(pCabecera);
-		$('#contenido').css('margin-top', 50); // lugar de la cabecera
+		$('#contenido').css('margin-top', 0); // lugar de la cabecera
 	}else{
 		$("#cabecera").hide();	
+		$('#cabecera_menu_abierto').hide();	
 		$('#contenido').css('margin-top', 0); // lugar de la cabecera	
 	}
 	
@@ -169,6 +184,7 @@ function cambiar_contenido(pUrl, pCabecera, pMenu, pPie, pGuardarHistorial, pCab
 	if(!pPie){
 		$("#pie").hide();
 	}
+	
 }
 
 // cuando devuelve la pos el gps

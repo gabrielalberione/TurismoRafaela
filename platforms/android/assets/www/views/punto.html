@@ -23,7 +23,7 @@
             <div style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; top: 0px; left: 0px; width: 100%; height: 100%;"></div>
             <div style="position:absolute;display:block;background:url('img/loading.gif') no-repeat center center;top:0px;left:0px;width:100%;height:100%;"></div>
         </div>
-        <div id="ps_imagenes" data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 1300px; height: 670px; overflow: hidden;">
+        <div id="ps_imagenes" data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 1300px; height: 670px; overflow: hidden; background-color:#333333;">
         </div>
 
         <span class="fa fa-chevron-right jssora22l" data-u="arrowright" style="padding-left: 45px; right: 15px; background-color:#6939a6;"></span>
@@ -31,7 +31,7 @@
     </div>
 </div>
 <div id="punto_info" style="margin-top: 15px">
-	<a id="punto_link_mapa"><img src="img/iconos/pois.png" style="height: 35px; margin-top: 5px;float:right;"></a><span id="punto_titulo"></span><br><br>
+	<a id="punto_link_mapa"><img src="img/marker.png" style="height: 35px; margin-top: 5px;float:right;"></a><span id="punto_titulo"></span><br><br>
 	<span id="punto_sub_titulo" ></span><br>
 	<span id="punto_descripcion"></span>        
 </div>
@@ -57,16 +57,17 @@
     </div>
 </div>
 
-<script>	
-	var audio_src = "";
-	
-	$("#foot_contenido_extra").html($("#reproductor").html());
-	$("#reproductor").html("");
-	document.getElementById('barra_completa_sonido').onclick = adelantar_audio;
-		
-	inciar_punto();
+<script>
 	var punto_activo = [];
-	var iterador = 0;
+	var iterador = 0;	
+	var audio_src = "";
+	$( document ).ready( function() { 
+		$("#foot_contenido_extra").html($("#reproductor").html());
+		$("#reproductor").html("");
+		document.getElementById('barra_completa_sonido').onclick = adelantar_audio;
+			
+		inciar_punto();
+	});
 	
 	function cargar_punto(tx, rs){
 		var len = rs.rows.length;
@@ -75,10 +76,17 @@
 		var ban_primero = true;
 		for (var i=0; i<len; i++){
 			var nombre = rs.rows.item(i).nombre;
-			console.log("Test: "+rs.rows.item(i).id+"-"+rs.rows.item(i).layer_id+"-"+rs.rows.item(i).grouplayer_id+"-");
+			//console.log("Test: "+rs.rows.item(i).id+"-"+rs.rows.item(i).layer_id+"-"+rs.rows.item(i).grouplayer_id+"-");
 			$("#punto_titulo").html(rs.rows.item(i).nombre);
 			$("#punto_sub_titulo").html(rs.rows.item(i).subtitulo);
-			$("#punto_descripcion").html(rs.rows.item(i).descripcion);	
+			$("#punto_descripcion").html(rs.rows.item(i).descripcion);
+			if(window.localStorage.getItem("group_activo_id") == pois_parametros.grouplayer_id){
+				var contenido = "<span class='layer_subtitulo color_letra_gris_claro'><b>Dirección: </b>"+rs.rows.item(i).calle+" "+rs.rows.item(i).altura;
+				contenido += "<br><b>Telefono: </b>"+rs.rows.item(i).telefono+" "+rs.rows.item(i).telefonodos;
+				contenido += "<br><b>E-Mail: </b>"+rs.rows.item(i).email;
+				contenido += "<br><b>Web: </b>"+rs.rows.item(i).web+"</span>";
+				$("#punto_descripcion").html(contenido);
+			}	
 			var aux_point = rs.rows.item(i).wkt;	
 			$("#punto_link_mapa").attr("href","javascript:abrir_mapa_con_zoom('"+aux_point+"')");			
 			
@@ -94,7 +102,7 @@
 		i_mul = 0;		
 		for (var i=0; i<len; i++){
 			var nombre = rs.rows.item(i).nombre;
-			console.log("Test: "+rs.rows.item(i).id+"-"+rs.rows.item(i).layer_id+"-"+rs.rows.item(i).grouplayer_id+"-");
+			//console.log("Test: "+rs.rows.item(i).id+"-"+rs.rows.item(i).layer_id+"-"+rs.rows.item(i).grouplayer_id+"-");
 			if(rs.rows.item(i).tipo != 4){
 				punto_activo["multimedias"][i_mul] = [];
 				punto_activo["multimedias"][i_mul]["url_online"] = rs.rows.item(i).url_online+"/"+rs.rows.item(i).codigo;							
@@ -167,8 +175,8 @@
 		var group_id =  window.localStorage.getItem("group_activo_id");
 		
 		pc_get_punto(punto_id, recorrido_id, group_id, cargar_punto);
-		mc_get_multimedias(punto_id, recorrido_id, group_id, cargar_multimedias);	
-		/*
+		//mc_get_multimedias(punto_id, recorrido_id, group_id, cargar_multimedias);	
+		
 		$.getJSON(urlSd + recorrido_id +"/"+"puntos.json", function( subdata ) {																											
 			$.each( subdata, function( subkey, sitem ) {   
 				if(subkey == "features"){
@@ -189,7 +197,7 @@
 									i_mul++;
 								}					
 							});
-							punto_activo["titulo"] = "";
+							/*punto_activo["titulo"] = "";
 							punto_activo["subtitulo"] = "";	
 							var aux_point = subitem.properties.wkt;	
 							$("#punto_link_mapa").attr("href","javascript:abrir_mapa_con_zoom('"+aux_point+"')");			
@@ -203,18 +211,18 @@
 								if(multitem.nombre == "descripcion"){
 									punto_activo["descripcion"] = multitem.valor;
 								}
-							});					
+							});	*/				
 						}
 					});
 				}
 			});
 			
-			/* Pintamos la info del punto 
+			/* Pintamos la info del punto /*
 			$("#punto_titulo").html(punto_activo.titulo);
 			$("#punto_sub_titulo").html(punto_activo.subtitulo);
 			$("#punto_descripcion").html(punto_activo.descripcion);	*/					
 			
-			/* Pintamos la multimedia del punto 
+			/* Pintamos la multimedia del punto */
 			var contenido_imagenes = "";
 			var contenido_imagenes_slider = "";
 			var contenido_videos = "";			
@@ -248,7 +256,7 @@
 				}	
 				
 
-				/* verificamos si existe en la sd, sino buscamos en interne/
+				/* verificamos si existe en la sd, sino buscamos en interne*/
 				iterador++;			
 			});
 			if(cc_imagenes > 0){
@@ -266,7 +274,7 @@
 
 			iterador = 0;
 			verificar_existencia_archivo(punto_activo.multimedias[iterador].url_local, iterador);
-		});*/									
+		});									
 	}
 	
 	/* Recorremos uno detras de otro, por que son tareas asincronas, sino hace lio */
@@ -331,7 +339,8 @@
 	}				
 	
 	function abrir_mapa_con_zoom(point){
-		mapa_urlSd = urlSd + window.localStorage.getItem("recorrido_activo_id")+"/";
+		$(window).scrollTop(0);
+		mapa_urlSd = urlSd + window.localStorage.getItem("layer_activo_id")+"/";
 		mapa_hacer_zoom = true;
 		mapa_punto = point;
 		if( window.localStorage.getItem("group_activo_id") == recorrido_parametros.grouplayer_id){
@@ -353,7 +362,7 @@
 		var jssor_1_options = {
 		  $AutoPlay: true,
 		  $SlideDuration: 800,
-		  $FillMode:2,
+		  $FillMode:1,
 		  $SlideEasing: $Jease$.$OutQuint,
 		  $ArrowNavigatorOptions: {
 			$Class: $JssorArrowNavigator$

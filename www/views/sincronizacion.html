@@ -1,68 +1,71 @@
-<html>
-    <div id="sincronizacion_configuracion">
-        <!--<img src="img/top_muni_mini.png" class="img-responsive" />-->
-        <div class="col-md-12" style="margin: 10px; margin-top: 45px;">
-        	<div class="col-md-12">
-                <h4 class="color_letra_celeste"><b>Hay nueva infomación para descargarte!</b></h4>
-                <p class="color_letra_gris_claro" style="text-align: justify; font-size: 14px; margin-bottom: 20px;">Seleccione que desea tener en su celular:</p>
-           	</div>
-            <div class="col-md-12 sincronizacion_opciones">
-            	<div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-align-left"></i>Textos</div>
-            	<div class="switch" style="float:right;">
-                    <input id="cmn-toggle-1" onClick="descargar_textos()" class="cmn-toggle cmn-toggle-round" type="checkbox" checked>
-                    <label for="cmn-toggle"></label>
-                </div> 
-            </div>
-            <div class="col-md-12 sincronizacion_opciones">
-            	<div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-volume-up"></i>Audios</div>
-            	<div class="switch" style="float:right;">
-                    <input id="cmn-toggle-2" onClick="descargar_audios()" class="cmn-toggle cmn-toggle-round" type="checkbox">
-                    <label for="cmn-toggle-2"></label>
-                </div> 
-            </div>
-            <div class="col-md-12 sincronizacion_opciones">
-            	<div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-picture-o"></i>Imagenes</div>
-            	<div class="switch" style="float:right;">
-                    <input id="cmn-toggle-3" class="cmn-toggle cmn-toggle-round" type="checkbox" onClick="descargar_imagenes()">
-                    <label for="cmn-toggle-3"></label>
-                </div> 
-            </div>
-            <div class="col-md-12 sincronizacion_opciones">
-            	<div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-video-camera"></i>Videos</div>
-            	<div class="switch" style="float:right;">
-                    <input id="cmn-toggle-4" onClick="descargar_videos()" class="cmn-toggle cmn-toggle-round" type="checkbox">
-                    <label for="cmn-toggle-4"></label>
-                </div> 
-            </div>
-            <div class="col-md-12">
-	            <button onClick="sincronizar()" type="button" class="btn btn-primary" style="background-color:#62A241; border-color:#62A241; margin: auto; border-radius: 60px; width: 100%; margin-top: 15px;">Sincronizar</button>
-            </div>
-         </div>
-    </div>
-    <div id="sincronizacion_descargando" style="display:none; margin-top: 45px">
-		<div class="col-md-12" style="text-align:center;">
-            <h4 class="color_letra_celeste"><b>Descargando contenido!</b></h4>
-            <p class="color_letra_gris_claro" style="font-size: 14px; margin-bottom: 20px;">Por favor espere un momento...</p>
-        </div>    
-    	<div class="cssload-wraper">
-            <div class="cssload-dots"></div>
+<div id="sincronizacion_configuracion">
+    <!--<img src="img/top_muni_mini.png" class="img-responsive" />-->
+    <div class="col-md-12" style="margin: 10px; margin-top: 65px;">
+        <div class="col-md-12">
+            <h4 class="color_letra_celeste"><b>Hay nueva infomación para descargarte!</b></h4>
+            <p class="color_letra_gris_claro" style="text-align: justify; font-size: 14px; margin-bottom: 20px;">Seleccione que desea tener en su celular:</p>
         </div>
-        <div class="col-md-12" style="text-align:center;">
-        	<p id="estado_descarga" class="color_letra_gris_claro"></p>
-            <div id="descargando_barra"><span id="descargando_barra_poc"></span></div>
-        </div> 
+        <div class="col-md-12 sincronizacion_opciones">
+            <div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-align-left"></i>Textos</div>
+            <div class="switch" style="float:right;">
+                <input id="cmn-toggle-1" onClick="descargar_textos()" class="cmn-toggle cmn-toggle-round" type="checkbox" checked>
+                <label for="cmn-toggle"></label>
+            </div> 
+        </div>
+        <div class="col-md-12 sincronizacion_opciones">
+            <div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-volume-up"></i>Audios</div>
+            <div class="switch" style="float:right;">
+                <input id="cmn-toggle-2" onClick="descargar_audios()" class="cmn-toggle cmn-toggle-round" type="checkbox">
+                <label for="cmn-toggle-2"></label>
+            </div> 
+        </div>
+        <div class="col-md-12 sincronizacion_opciones">
+            <div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-picture-o"></i>Imagenes</div>
+            <div class="switch" style="float:right;">
+                <input id="cmn-toggle-3" class="cmn-toggle cmn-toggle-round" type="checkbox" onClick="descargar_imagenes()">
+                <label for="cmn-toggle-3"></label>
+            </div> 
+        </div>
+        <div class="col-md-12 sincronizacion_opciones">
+            <div class="color_letra_gris_claro sincronizacion_opcion"><i class="fa fa-video-camera"></i>Videos</div>
+            <div class="switch" style="float:right;">
+                <input id="cmn-toggle-4" onClick="descargar_videos()" class="cmn-toggle cmn-toggle-round" type="checkbox">
+                <label for="cmn-toggle-4"></label>
+            </div> 
+        </div>
+        <div class="col-md-12">
+            <button onClick="sincronizar()" type="button" class="btn btn-primary" style="background-color:#62A241; border-color:#62A241; margin: auto; border-radius: 60px; width: 100%; margin-top: 15px;">Sincronizar</button>
+        </div>
+     </div>
+</div>
+<div id="sincronizacion_descargando" style="display:none; margin-top: 45px">
+    <div class="col-md-12" style="text-align:center;">
+        <h4 class="color_letra_celeste"><b>Descargando contenido!</b></h4>
+        <p class="color_letra_gris_claro" style="font-size: 14px; margin-bottom: 20px;">Por favor espere un momento...</p>
+    </div>    
+    <div class="cssload-wraper">
+        <div class="cssload-dots"></div>
     </div>
-</html>
+    <div class="col-md-12" style="text-align:center;">
+        <p id="estado_descarga" class="color_letra_gris_claro"></p>
+        <div id="descargando_barra"><span id="descargando_barra_poc"></span></div>
+    </div> 
+</div>
 
-<script>
-	var permitir_descargar_audios = false;
-	var permitir_descargar_imagenes = false;
-	var permitir_descargar_videos = false;	
-	/* Seteo para que cuando termine de sincronizar vaya a recorridos */
-	window.localStorage.setItem("ultima_web", "views/recorridos.html");
-	window.localStorage.setItem("ultima_web_menu", true);
-	window.localStorage.setItem("ultima_web_pie", true);
-	window.localStorage.setItem("ultima_web_cabecera", "Recorridos");		
+
+<script>	
+	$( document ).ready( function() { 
+		//desactivar_loading();
+		var permitir_descargar_audios = false;
+		var permitir_descargar_imagenes = false;
+		var permitir_descargar_videos = false;	
+
+		/* Seteo para que cuando termine de sincronizar vaya a recorridos */
+		window.localStorage.setItem("ultima_web", "views/recorridos.html");
+		window.localStorage.setItem("ultima_web_menu", true);
+		window.localStorage.setItem("ultima_web_pie", true);
+		window.localStorage.setItem("ultima_web_cabecera", "Recorridos");			
+	});
 		
 	function sincronizar(){		
 		$("#sincronizacion_configuracion").hide();
@@ -70,6 +73,7 @@
 		pc_crear_tabla();	
 		mc_crear_tabla();
 		lc_crear_tabla();
+		//ac_crear_tabla();
 		$("#estado_descarga").html("Descargando recorridos...");
 		
 		/* Descargamos los recorridos y lo guardamos en la sd */
@@ -165,22 +169,22 @@
 	}
 	
 	function descargar_agenda(){
-		/* Descargamos la agenda y lo guardamos en la sd */
+		/* Descargamos la agenda y lo guardamos en la sd 
 		var fileTransfer = new FileTransfer();
 		var pFecha = get_hoy_ing();
-		if (localStorage.getItem("act_agenda") === null) {
+		//if (localStorage.getItem("act_agenda") === null) {
 			pFecha = "1900-01-01";
-		}
+		//}
 		fileTransfer.download(urlHost+urlGetAgenda+pFecha, urlSd + agenda_parametros.nombre_json, 
 		function(entry) {		
 			$("#estado_descarga").html("Descargando agenda...");
-			ac_copar_json_a_bd(ac_vacio);
-			descargar_pois();
+			ac_copiar_json_a_bd(ac_vacio);*/
+			descargar_pois();/*
 		}, 
 		function(err) {
 			console.log("Error");
 			$("#estado_descarga").html("Error en descarga de agenda...");
-		});				
+		});*/				
 	}
 	
 	function descargar_pois(){
@@ -201,47 +205,48 @@
 	}
 	
 	function buscar_multimedias(posicion){
-		//++cantidad_descargas;
-		$.getJSON(list_descargas[posicion][1], function( data ) {		
+		//++cantidad_descargas;		
+		$.getJSON(list_descargas[posicion][1], function( data ) {			
 			$.each( data, function( key, itemaux ) {	
-				if(key == "features"){			
-					$.each( itemaux, function( key, itemaux ) {			
-						$.each( itemaux.properties.multimedias, function( subkey, subitem ) {
-							var regMulti = [];
-									
-							var punto_id = subitem.entidad_id; 
-							var recorrido_id = subitem.layer_id; 	
-							var nombre_multimedia = subitem.codigo; 
-							regMulti['id'] = subitem.id;
+				if(key == "features"){
+					$.each( itemaux, function( subkey, subitem ) {
+						$.each( subitem.properties.multimedias, function( subkey, multitem ) {						
+							//console.log("hola hdp!");
+							//var regMulti = [];	
+							mc_grabar_multimedias(list_descargas[posicion][1]);							
+							var punto_id = multitem.entidad_id; 
+							var recorrido_id = multitem.layer_id; 	
+							var nombre_multimedia = multitem.codigo; 
+							/*regMulti['id'] = multitem.id;
 							regMulti['entidad_id'] = punto_id;
 							regMulti['layer_id'] = recorrido_id;
 							regMulti['grouplayer_id'] = list_descargas[posicion][6];																												
 							regMulti['codigo'] = nombre_multimedia;
-							regMulti['titulo'] = subitem.titulo;
-							regMulti['orden'] = subitem.orden;	
-							regMulti['tipo'] = subitem.tipo;
-							regMulti['url_online'] = subitem.url;
-							mc_add_multimedia(regMulti);	// grabo en base de datos
+							regMulti['titulo'] = multitem.titulo;
+							regMulti['orden'] = multitem.orden;	
+							regMulti['tipo'] = multitem.tipo;
+							regMulti['url_online'] = multitem.url;
+							mc_add_multimedia(regMulti);	*/// grabo en base de datos
 											
-							if(subitem.tipo != 4){ // verifico si tengo q descargar						
+							if(multitem.tipo != 4){ // verifico si tengo q descargar						
 								var permitir_descarga = true;
-								if((subitem.tipo == 0) && (permitir_descargar_imagenes == false)){
+								if((multitem.tipo == 0) && (permitir_descargar_imagenes == false)){
 									permitir_descarga = false;
 								}
-								if((subitem.tipo == 2) && (permitir_descargar_videos == false)){
+								if((multitem.tipo == 2) && (permitir_descargar_videos == false)){
 									permitir_descarga = false;
 								}
-								if((subitem.tipo == 1) && (permitir_descargar_audios == false)){
+								if((multitem.tipo == 1) && (permitir_descargar_audios == false)){
 									permitir_descarga = false;
 								}
 								if(permitir_descarga){							
 									
-									var url_origen =  subitem.url+"/"+nombre_multimedia; 											
+									var url_origen =  multitem.url+"/"+nombre_multimedia; 											
 									var urlDestino = urlSd + recorrido_id +"/"+punto_id+"/"+nombre_multimedia;	
 									list_descargas[cantidad_descargas] = new Array();
 									list_descargas[cantidad_descargas][0] = url_origen;
 									list_descargas[cantidad_descargas][1] = urlDestino;
-									list_descargas[cantidad_descargas][2] = "multimedias del punto: "+itemaux.titulo;					
+									list_descargas[cantidad_descargas][2] = "multimedias del punto: "+multitem.titulo;					
 									list_descargas[cantidad_descargas][3] = false;	// buscar multimedia?
 									list_descargas[cantidad_descargas][4] = false;
 									list_descargas[cantidad_descargas][5] = recorrido_id;	// es un punto?

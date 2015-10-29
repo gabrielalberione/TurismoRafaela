@@ -21,7 +21,7 @@
                <img src="img/iconos/agenda.png" /><div class="menu_accion">Agenda</div>
             </div>
         </a>                        		
-        <a href="javascript:leer_qr(); abrir_menu();">
+        <a href="javascript:abrir_configuracion(); abrir_menu();">
             <div class="col-xs-12 menu_item">
                <img src="img/iconos/configuracion.png" /><div class="menu_accion">Configuración</div>
             </div>
@@ -45,14 +45,28 @@
 		touchToDrag: false,
 		transitionSpeed: 0.00001,
 		disable: 'right'
-	});				
+	});			
+	
+	snapper.on('open', function(){
+       $(window).scrollTop(0);
+	   $("#cabecera").hide();
+	});	
+	
+	snapper.on('end', function(){
+	   $("#cabecera").show();
+	});		
 	
 	function abrir_menu(){
 		 if( snapper.state().state=="left" ){
-				snapper.close();
+			snapper.close();
 		} else {
 			snapper.open('left');
 		} 
+	}
+	
+	function abrir_configuracion(){
+		cambiar_contenido("views/sincronizacion.html", "Sincronización", true, true, false, recorrido_parametros.color_cabecera_fondo, recorrido_parametros.color_cabecera_borde);
+		abrir_menu();
 	}
 	
 	function abrir_recorrido(){
@@ -68,17 +82,16 @@
 	}	
 	
 	function abrir_qr(){
-		javascript:cambiar_contenido('views/ayuda_lector.html', 'Lector QR', true, true, true, qr_parametros.color_cabecera_fondo, qr_parametros.color_cabecera_borde); 
+		cambiar_contenido('views/ayuda_lector.html', 'Lector QR', true, true, true, qr_parametros.color_cabecera_fondo, qr_parametros.color_cabecera_borde); 
 		abrir_menu();
 	}
 	
 	function leer_qr(){		
 		cordova.plugins.barcodeScanner.scan(
 		  function (result) {
-			  alert("We got a barcode\n" +
-					"Result: " + result.text + "\n" +
-					"Format: " + result.format + "\n" +
-					"Cancelled: " + result.cancelled);
+			  var texto = result.text;
+			  var partes = texto.split("/");
+			  ir_a_entidad(partes[7],partes[8],recorrido_parametros.grouplayer_id);
 		  }, 
 		  function (error) {
 			  alert("Scanning failed: " + error);
@@ -94,6 +107,7 @@
 	
 	function abrir_agenda(){
 		cambiar_contenido('views/agenda.html', 'Agenda de eventos', true, true, true, agenda_parametros.color_cabecera_fondo, agenda_parametros.color_cabecera_borde); 
+		cambiar_contenido('views/agenda.html', 'Agenda de eventos', true, true, false, agenda_parametros.color_cabecera_fondo, agenda_parametros.color_cabecera_borde); 
 		abrir_menu();
 	}
 </script>
